@@ -4,7 +4,6 @@
   "description": "Application that help with being productive with no routine",
   "main": "index.js",
   "author": "Bartłomiej Strama",
-  "license": "GPL-v3.0-or-later",
   "private": false,
   "dependencies": {
     "body-parser": "^1.20.1",
