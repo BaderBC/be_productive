@@ -1,10 +1,8 @@
 const pgp = require('pg-promise')();
 
-//TODO: complete code bellow
-throw new Error('complete code bellow');
 
 const {
-    DATABASE_URL = ""
+    DATABASE_URL = "postgresql://localhost/be_productive"
 } = process.env;
 
 global.db = pgp(DATABASE_URL);

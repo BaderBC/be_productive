@@ -33,7 +33,10 @@ addForm.addEventListener('submit', () => {
         duration: durationInMs
     })
         .then(data => data.json())
-        .then(console.log);
+        .then(data => {
+            console.log(data);
+            if (!data.ok) alert("ERROR: " + data.message);
+        });
 });
 
 
