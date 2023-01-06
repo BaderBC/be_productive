@@ -3,6 +3,7 @@ require('./services/postgres.service');
 const path = require('path');
 
 const express = require('express');
+const CORS = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const expressSlash = require('express-slash');
@@ -12,22 +13,28 @@ const server = require('http').createServer(app);
 const PORT = process.env.PORT || 3000;
 
 const { checkIfLoggedIn } = require('./services/authorization.middleware');
+const { corsMiddleware } = require('./services/cors.service');
 
 const indexController = require('./controllers/index.controller');
-const addController = require('./controllers/add.controller');
+const activitiesController = require('./controllers/activities.controller');
 const authController = require('./controllers/auth.controller');
 
 
+//app.enable('trust proxy');
+app.use(corsMiddleware);
+//app.use(CORS({origin: "*"}));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.use('/', indexController);
-app.use('/add', checkIfLoggedIn, addController);
-app.use('/auth', authController);
 
-app.use(express.static(path.resolve(__dirname, 'public')));
-app.use(expressSlash());
+app.use('/auth', authController);
+app.use('/activities', checkIfLoggedIn, activitiesController);
+//app.use(expressSlash());
+app.use('/', checkIfLoggedIn, indexController);
+
+
+//app.use(express.static(path.resolve(__dirname, 'public')));
 
 
 (async () => {

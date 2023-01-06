@@ -16,7 +16,13 @@ const {
     cookieExpiration = dayjs().add(30, 'days').toDate()
 } = process.env
 
+router.use((req, res, next) => {
+    console.log(req.url)
+    next();
+})
+
 router.get('/', (req, res) => {
+    console.log('ok')
     res.sendFile(path.resolve(__dirname, '../public/auth/index.html'));
 });
 
@@ -88,10 +94,6 @@ async function generateCookie(email) {
     if(true) {
 
         const token = generateJwtToken(email);
-        const dataToSecure = {
-            token,
-            email
-        };
 
         const cookieParams = {
             secure: NODE_ENV !== "development",
@@ -99,7 +101,8 @@ async function generateCookie(email) {
             expires: cookieExpiration
         };
 
-        return [dataToSecure, cookieParams];
+        //TODO: change object with token to just token
+        return [{token}, cookieParams];
     }
 }
 

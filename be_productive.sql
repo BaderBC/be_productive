@@ -5,8 +5,7 @@ DROP DATABASE IF EXISTS be_productive;
 CREATE DATABASE be_productive;
 */
 CREATE TABLE users (
-    user_id serial PRIMARY KEY,
-    email varchar(254) NOT NULL UNIQUE,
+    email varchar(254) NOT NULL PRIMARY KEY,
     firstname varchar(40),
     lastname varchar(40),
     hashed_password varchar NOT NULL
@@ -15,9 +14,10 @@ CREATE TABLE users (
 CREATE TABLE activities (
     activity_id serial PRIMARY KEY,
     name varchar(100) NOT NULL,
-    time_to_spend_weekly interval NOT NULL,
-    user_id int NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    time_to_spend_weekly int NOT NULL,
+    user_email varchar(254) NOT NULL,
+    UNIQUE (user_email, name),
+    FOREIGN KEY (user_email) REFERENCES users(email)
 );
 
 CREATE TABLE time_spent_this_week (
@@ -47,8 +47,8 @@ CREATE TRIGGER update_week_number AFTER UPDATE
 INSERT INTO users (email, hashed_password)
     VALUES ('test@example.com', 'lasdkfjhadsf');
 
-INSERT INTO activities (name, time_to_spend_weekly, user_id)
-    VALUES ('gotowanie', '12h', 1);
+INSERT INTO activities (name, time_to_spend_weekly, user_email)
+    VALUES ('gotowanie', 12 * 60 * 60 * 1000, 'test@example.com');
 
 INSERT INTO time_spent_this_week (activity_id, time_spent_ms)
     VALUES (1, 1 * 60 * 60 * 1000);

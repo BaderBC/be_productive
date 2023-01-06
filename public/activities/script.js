@@ -28,14 +28,19 @@ addForm.addEventListener('submit', () => {
     if(duration.length > 2) durationInMs += parseInt(duration[2]) * 1000;
 
 
-    jsonByPost('/add', {
+    jsonByPost('/activities/add', {
         name,
         duration: durationInMs
     })
         .then(data => data.json())
         .then(data => {
+            if (!data.ok) {
+                alert("ERROR: " + data.message);
+                throw new Error(data.message);
+            }
             console.log(data);
-            if (!data.ok) alert("ERROR: " + data.message);
+            window.location.reload();2
+
         });
 });
 
