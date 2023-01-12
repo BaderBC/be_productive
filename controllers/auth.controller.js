@@ -23,7 +23,7 @@ router.use((req, res, next) => {
 
 router.get('/', (req, res) => {
     console.log('ok')
-    res.sendFile(path.resolve(__dirname, '../public/auth/index.html'));
+    res.sendFile(path.resolve(__dirname, '../public/auth/+page.svelte'));
 });
 
 router.post('/register', async (req, res) => {

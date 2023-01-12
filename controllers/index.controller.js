@@ -8,7 +8,7 @@ router.use((req, res, next) => {
 
 router.get('/', (req, res) => {
     console.log('/ cookies: ', req.cookies);
-    res.sendFile(path.resolve(__dirname, '../public/index/index.html'));
+    res.sendFile(path.resolve(__dirname, '../public/index/+page.svelte'));
 });
 
 module.exports = router;

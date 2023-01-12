@@ -26,7 +26,7 @@ router.get('/list', async (req, res) => {
         const { email } = req.token;
         console.log(`\n\n${email}`);
 
-        const activities = await db.any("SELECT * FROM activities WHERE user_email = $1", [email]);
+        const activities = await db.any("SELECT name, time_to_spend_weekly AS time_weekly FROM activities WHERE user_email = $1", [email]);
         res.status(200).send(JSON.stringify(activities));
 
     } catch (err) {
@@ -36,7 +36,7 @@ router.get('/list', async (req, res) => {
 });
 
 router.get('/', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../public/activities/index.html'));
+    res.sendFile(path.resolve(__dirname, '../public/activities/+page.svelte'));
 });
 
 router.post('/add', async (req, res) => {
@@ -44,7 +44,8 @@ router.post('/add', async (req, res) => {
         const { name, duration } = req.body;
         const { email } = req.token;
 
-        console.log(name, duration, email);
+        console.table([name, duration, email]);
+        console.log(req.body);
 
         await db
             .none("INSERT INTO activities(name, time_to_spend_weekly, user_email)" +
@@ -55,6 +56,10 @@ router.post('/add', async (req, res) => {
         res.status(200).redirect('activities/list');
     } catch (err) {
         console.error(err);
+        res.status(500).json({
+            ok: false,
+            err: `Error: ${err.toString()}`
+        })
     }
 });
 

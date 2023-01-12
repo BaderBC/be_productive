@@ -20,9 +20,11 @@ const activitiesController = require('./controllers/activities.controller');
 const authController = require('./controllers/auth.controller');
 
 
-//app.enable('trust proxy');
 app.use(corsMiddleware);
-//app.use(CORS({origin: "*"}));
+app.use((req, res, next) => {
+    console.log('Body', req.body);
+    next();
+});
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cookieParser());

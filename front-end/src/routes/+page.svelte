@@ -16,13 +16,53 @@
             console.error(err);
             //window.location.assign('/auth');
         });
+
+    function msIntoDuration(millis) {
+        const dur = {};
+        const units = [
+            {label: "millis",    mod:1000},
+            {label: "seconds",   mod:60},
+            {label: "minutes",   mod:60},
+            {label: "hours",     mod:24},
+            {label: "days",      mod:31}
+        ];
+        // calculate the individual unit values...
+        units.forEach(function(u){
+            millis = (millis - (dur[u.label] = (millis % u.mod))) / u.mod;
+        });
+        // convert object to a string representation...
+        const nonZero = u => dur[u.label];
+
+        dur.__proto__.toString = function() {
+            return units
+                .reverse()
+                .filter(nonZero)
+                .map(function(u){
+                    return dur[u.label] + " " + (dur[u.label]===1?u.label.slice(0,-1):u.label);
+                })
+                .join(', ');
+        };
+        return dur;
+    }
+
+    function startSession() {
+        console.log('ok');
+    }
 </script>
 
 <a href="/activities">Manage Activities</a> <br>
 <a href="auth">Login / Register</a><br>
 
 {#each activities as activity}
-    <div style="border: solid aqua">
-        <p>{activity.name}</p>
+    <div style="border: solid aqua; text-align: center">
+        <p style="color: #13f091;">{JSON.stringify(activity)}</p>
+        <p>Activity name: {activity.name}</p>
+        <p>Time to spend weekly: {msIntoDuration(activity.time_weekly)}</p>
+
+        {#if true}
+            <button>Start doing this activity</button>
+        {:else}
+            <button>Stop doing this activity</button>
+        {/if}
     </div>
 {/each}
