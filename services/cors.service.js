@@ -1,21 +1,12 @@
 const cors = require('cors');
 
-const origins = ['local']
-
 const corsOptions = {
     origin: true,
-    methods: [],
-    allowedHeaders: [],
-    exposedHeaders: [],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ['X-Requested-With,Content-Type', 'Access-Control-Allow-Origin', 'Origin'],
     credentials: true
 };
-//const CORS = cors(corsOptions);
-const CORS = cors({
-    origin: 'http://localhost:5173',
-    'Access-Control-Allow-Credentials': true,
-    'Access-Control-Allow-Origin': true
-});
 
 module.exports = {
-    corsMiddleware: CORS
+    corsMiddleware: cors(corsOptions)
 };

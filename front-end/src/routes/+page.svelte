@@ -1,4 +1,4 @@
-<script defer>
+<script>
     let activities = [];
 
     fetch('http://localhost:3000/activities/list', {
@@ -9,7 +9,7 @@
     })
         .then(res => res.json())
         .then(res => {
-            console.log(res);
+            console.log('then: ', res);
             activities = res;
         })
         .catch(err => {
@@ -45,24 +45,34 @@
         return dur;
     }
 
-    function startSession() {
-        console.log('ok');
+    function startDoingActivity(activityName) {
+        console.log(activityName);
+        fetch('http://localhost:3000/', {})
     }
+
 </script>
+<main>
+    <style>
+        body {
+            background-color: #141519;
+            color: rgba(255, 255, 255, 0.84);
+        }
+    </style>
 
-<a href="/activities">Manage Activities</a> <br>
-<a href="auth">Login / Register</a><br>
+    <a href="/activities">Manage Activities</a> <br>
+    <a href="auth">Login / Register</a><br>
 
-{#each activities as activity}
-    <div style="border: solid aqua; text-align: center">
-        <p style="color: #13f091;">{JSON.stringify(activity)}</p>
-        <p>Activity name: {activity.name}</p>
-        <p>Time to spend weekly: {msIntoDuration(activity.time_weekly)}</p>
+    {#each activities as activity}
+        <div style="border: solid aqua; text-align: center">
+            <p style="color: #13f091;">{JSON.stringify(activity)}</p>
+            <p>Activity name: {activity.name}</p>
+            <p>Time to spend weekly: {msIntoDuration(activity.time_weekly)}</p>
 
-        {#if true}
-            <button>Start doing this activity</button>
-        {:else}
-            <button>Stop doing this activity</button>
-        {/if}
-    </div>
-{/each}
+            {#if true}
+                <button on:click={() => startDoingActivity(activity.name)}>Start doing this activity</button>
+            {:else}
+                <button>Stop doing this activity</button>
+            {/if}
+        </div>
+    {/each}
+</main>

@@ -4,8 +4,8 @@ const router = require('express').Router();
 
 router.get('/list/:name', async (req, res) => {
     try {
-        const { name } = req.params;
-        const { email } = req.token;
+        const {name} = req.params;
+        const {email} = req.token;
 
         const activity = await db.one("SELECT * FROM activities WHERE name = $1 AND user_email = $2", [name, email]);
         res.json(activity);
@@ -23,7 +23,7 @@ router.get('/list/:name', async (req, res) => {
 
 router.get('/list', async (req, res) => {
     try {
-        const { email } = req.token;
+        const {email} = req.token;
         console.log(`\n\n${email}`);
 
         const activities = await db.any("SELECT name, time_to_spend_weekly AS time_weekly FROM activities WHERE user_email = $1", [email]);
@@ -41,8 +41,8 @@ router.get('/', (req, res) => {
 
 router.post('/add', async (req, res) => {
     try {
-        const { name, duration } = req.body;
-        const { email } = req.token;
+        const {name, duration} = req.body;
+        const {email} = req.token;
 
         console.table([name, duration, email]);
         console.log(req.body);
@@ -53,7 +53,10 @@ router.post('/add', async (req, res) => {
                 [name, duration, email]);
 
 
-        res.status(200).redirect('activities/list');
+        res.status(200).json({
+            ok: true,
+            redirect: 'activities/list'
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({

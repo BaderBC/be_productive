@@ -40,6 +40,7 @@ app.use('/', checkIfLoggedIn, indexController);
 
 
 (async () => {
+    console.clear();
     server.listen(PORT, () => {
         console.info(`Server is listening on port: ${PORT}...`);
     });
