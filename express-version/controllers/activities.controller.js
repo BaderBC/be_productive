@@ -26,12 +26,50 @@ router.get('/list', async (req, res) => {
         const {email} = req.token;
         console.log(`\n\n${email}`);
 
-        const activities = await db.any("SELECT name, time_to_spend_weekly AS time_weekly FROM activities WHERE user_email = $1", [email]);
+        const activities = await db.any("SELECT name, time_to_spend_weekly as time_weekly, description, session_start, time_spent_ms as time_spent FROM activities WHERE user_email = $1", [email]);
         res.status(200).send(JSON.stringify(activities));
 
     } catch (err) {
         console.error(err);
         res.status(500).send(`ERROR: ${err}`);
+    }
+});
+
+router.put('/start', async (req, res) => {
+    const {name} = req.body;
+    const {email} = req.token;
+    try {
+        await db
+            .none("UPDATE activities " +
+                "SET session_start = NOW()::timestamptz " +
+                "WHERE name = $1 AND user_email = $2",
+                [name, email]);
+        res.status(202).json({
+            ok: true
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            ok: false,
+            message: `ERROR: ${err}`
+        });
+    }
+});
+
+router.put('/stop', async (req, res) => {
+    const {name} = req.body;
+    const {email} = req.token;
+
+    try {
+        await db
+            .none("")
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            ok: false,
+            message: `ERROR: ${err}`
+        });
     }
 });
 
@@ -41,8 +79,8 @@ router.get('/', (req, res) => {
 
 router.post('/add', async (req, res) => {
     try {
-        const {name, duration} = req.body;
-        const {email} = req.token;
+        const { name, duration } = req.body;
+        const { email } = req.token;
 
         console.table([name, duration, email]);
         console.log(req.body);
@@ -61,7 +99,7 @@ router.post('/add', async (req, res) => {
         console.error(err);
         res.status(500).json({
             ok: false,
-            err: `Error: ${err.toString()}`
+            message: `Error: ${err.toString()}`
         })
     }
 });

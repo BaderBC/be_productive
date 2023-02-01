@@ -10,6 +10,7 @@
         .then(res => res.json())
         .then(res => {
             console.log('then: ', res);
+            console.log(res[0].session_start);
             activities = res;
         })
         .catch(err => {
@@ -42,12 +43,27 @@
                 })
                 .join(', ');
         };
-        return dur;
+        console.log('dur', dur.toString());
+        return dur.toString();
     }
-
     function startDoingActivity(activityName) {
         console.log(activityName);
-        fetch('http://localhost:3000/', {})
+        fetch('http://localhost:3000/activities/start', {
+            method: 'PUT',
+            redirect: 'follow',
+            credentials: 'include',
+            cache: 'no-cache',
+            'Access-Control-Allow-Credentials': true,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: activityName })
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+            })
     }
 
 </script>
@@ -60,18 +76,20 @@
     </style>
 
     <a href="/activities">Manage Activities</a> <br>
-    <a href="auth">Login / Register</a><br>
+    <a href="/auth">Login / Register</a><br>
 
     {#each activities as activity}
         <div style="border: solid aqua; text-align: center">
             <p style="color: #13f091;">{JSON.stringify(activity)}</p>
             <p>Activity name: {activity.name}</p>
+            <p>Description: {activities.description || "There's no description"}</p>
             <p>Time to spend weekly: {msIntoDuration(activity.time_weekly)}</p>
+            <p>Time already spent: {msIntoDuration(activity.time_sspent) || "none"}</p>
 
-            {#if true}
+            {#if activity.session_start === null}
                 <button on:click={() => startDoingActivity(activity.name)}>Start doing this activity</button>
             {:else}
-                <button>Stop doing this activity</button>
+                <button on:click={() => {console.log(activity)}}>Stop doing this activity</button>
             {/if}
         </div>
     {/each}

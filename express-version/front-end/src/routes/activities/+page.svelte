@@ -73,7 +73,6 @@
         console.log(JSON.stringify(data));
         return fetch(url, {
             method: 'POST',
-            //mode:'no-cors',
             redirect: 'follow',
             credentials: 'include',
             cache: 'no-cache',
