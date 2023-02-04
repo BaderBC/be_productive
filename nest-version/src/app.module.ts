@@ -6,9 +6,10 @@ import { AuthModule } from './auth/auth.module';
 
 import { AuthorizationMiddleware } from './services/authorization.middleware';
 import { ActivitiesController } from './activities/activities.controller';
+import { DbModule } from './db/db.module';
 
 @Module({
-  imports: [ActivitiesModule, AuthModule],
+  imports: [ActivitiesModule, AuthModule, DbModule],
   controllers: [AppController],
 })
 export class AppModule implements NestModule {
