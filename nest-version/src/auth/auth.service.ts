@@ -4,7 +4,7 @@ import * as jwt from 'jsonwebtoken';
 const {
   NODE_ENV,
   cookieExpiration, //TODO: change this
-  SECRET,
+  SECRET = 'c23487908n3410nx3as1dx',
 } = process.env;
 
 @Injectable()

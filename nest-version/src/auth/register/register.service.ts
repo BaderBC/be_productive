@@ -1,16 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { RegisterUserDto } from './register.dto';
-import * as sha512 from 'sha512';
+import { RegisterUserDto } from './dto/register.dto';
+import { DbService } from '../../db/db.service';
+import { sha512 } from 'js-sha512';
 
 @Injectable()
 export class RegisterService {
+  constructor(private readonly prisma: DbService) {}
+
   async addNewUser(userDto: RegisterUserDto) {
-    const { email, firstName, lastName, password } = userDto;
-    //throw new Error();
-    await global.db.none(
-      'INSERT INTO users(email, firstname, lastname, hashed_password)' +
-        'VALUES ($1, $2, $3, $4)',
-      [email, firstName, lastName, sha512(password)],
-    );
+    userDto.password = sha512(userDto.password);
+    console.log(userDto);
+    await this.prisma.users.create({ data: userDto });
   }
 }

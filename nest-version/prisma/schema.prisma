@@ -25,6 +25,6 @@ model users {
   email           String       @id @db.VarChar(254)
   firstname       String?      @db.VarChar(40)
   lastname        String?      @db.VarChar(40)
-  hashed_password String       @db.VarChar
+  password        String       @db.VarChar
   activities      activities[]
 }

@@ -1,6 +1,6 @@
-import { Body, Controller, Post, Redirect, Res } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { RegisterUserDto } from './register.dto';
+import { RegisterUserDto } from './dto/register.dto';
 import { RegisterService } from './register.service';
 import { AuthService } from '../auth.service';
 
@@ -11,14 +11,13 @@ export class RegisterController {
     private readonly authService: AuthService,
   ) {}
   @Post()
-  @Redirect('/')
-  //
-  //TODO: Complete code bellow
-  //
+  /*
+   * TODO: Complete code bellow
+   */
   async register(@Body() body: RegisterUserDto, @Res() res: Response) {
-    console.log(body);
     await this.registerService.addNewUser(body);
     const cookie: any[] = this.authService.generateCookie(body.email);
     res.status(200).cookie('jwt-auth', cookie);
+    res.send({ ok: true, statusCode: 200 });
   }
 }

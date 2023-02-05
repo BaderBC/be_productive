@@ -101,7 +101,6 @@ async function generateCookie(email) {
             expires: cookieExpiration
         };
 
-        //TODO: change object with token to just token
         return [{token}, cookieParams];
     }
 }
