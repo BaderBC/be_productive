@@ -1,19 +1,22 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 
 import { AppController } from './app.controller';
-import { ActivitiesModule } from './activities/activities.module';
 import { AuthModule } from './auth/auth.module';
-
-import { AuthorizationMiddleware } from './services/authorization.middleware';
-import { ActivitiesController } from './activities/activities.controller';
 import { DbModule } from './db/db.module';
+import { ActivitiesResolver } from './activities/activities.resolver';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 @Module({
-  imports: [ActivitiesModule, AuthModule, DbModule],
+  imports: [
+    AuthModule,
+    DbModule,
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: true,
+    }),
+  ],
   controllers: [AppController],
+  providers: [ActivitiesResolver],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthorizationMiddleware).forRoutes(ActivitiesController);
-  }
-}
+export class AppModule {}

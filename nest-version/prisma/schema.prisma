@@ -22,9 +22,9 @@ model activities {
 }
 
 model users {
-  email           String       @id @db.VarChar(254)
-  firstname       String?      @db.VarChar(40)
-  lastname        String?      @db.VarChar(40)
-  password        String       @db.VarChar
-  activities      activities[]
+  email      String       @id
+  firstname  String?      @db.VarChar(40)
+  lastname   String?      @db.VarChar(40)
+  password   String
+  activities activities[]
 }

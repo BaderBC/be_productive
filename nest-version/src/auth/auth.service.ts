@@ -9,7 +9,7 @@ const {
 
 @Injectable()
 export class AuthService {
-  generateCookie(email): any[] {
+  generateCookie(email): [string, object] {
     const token = this.generateJwtToken(email);
 
     const cookieParams = {
@@ -18,8 +18,7 @@ export class AuthService {
       expires: cookieExpiration,
     };
 
-    //TODO: change object with token to just token
-    return [{ token }, cookieParams];
+    return [token, cookieParams];
   }
 
   generateJwtToken(email): string {

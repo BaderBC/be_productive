@@ -10,14 +10,13 @@ export class RegisterController {
     private readonly registerService: RegisterService,
     private readonly authService: AuthService,
   ) {}
+
   @Post()
-  /*
-   * TODO: Complete code bellow
-   */
   async register(@Body() body: RegisterUserDto, @Res() res: Response) {
     await this.registerService.addNewUser(body);
-    const cookie: any[] = this.authService.generateCookie(body.email);
-    res.status(200).cookie('jwt-auth', cookie);
-    res.send({ ok: true, statusCode: 200 });
+    const cookie = this.authService.generateCookie(body.email);
+    // TODO: do the same as in login.controller.ts (destruct cookie)
+    res.status(200).cookie('jwt', ...cookie);
+    res.send({ message: 'User created' });
   }
 }
