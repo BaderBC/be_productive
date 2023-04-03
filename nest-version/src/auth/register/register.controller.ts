@@ -16,7 +16,9 @@ export class RegisterController {
     await this.registerService.addNewUser(body);
     const cookie = this.authService.generateCookie(body.email);
     // TODO: do the same as in login.controller.ts (destruct cookie)
-    res.status(200).cookie('jwt', ...cookie);
-    res.send({ message: 'User created' });
+    res
+      .status(200)
+      .cookie('jwt-auth', ...cookie)
+      .send({ message: 'User created' });
   }
 }

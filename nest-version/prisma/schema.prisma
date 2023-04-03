@@ -12,17 +12,18 @@ model activities {
   name                     String  @db.VarChar(30)
   description              String? @db.VarChar(200)
   time_to_spend_weekly     Int
-  user_email               String  @db.VarChar(254)
+  user_id                  Int
   time_spent_ms            Int     @default(0)
   week_number_after_update Int?    @default(dbgenerated("date_part('week'::text, now())")) @db.SmallInt
   session_start            BigInt?
-  users                    users   @relation(fields: [user_email], references: [email], onDelete: NoAction, onUpdate: NoAction)
+  users                    users   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@unique([user_email, name])
+  @@unique([user_id, name])
 }
 
 model users {
-  email      String       @id
+  id         Int          @id @default(autoincrement())
+  email      String       @unique
   firstname  String?      @db.VarChar(40)
   lastname   String?      @db.VarChar(40)
   password   String

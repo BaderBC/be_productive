@@ -1,27 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import * as jwt from 'jsonwebtoken';
+import { JwtService } from '@nestjs/jwt';
 
 const {
-  NODE_ENV,
-  cookieExpiration, //TODO: change this
-  SECRET = 'c23487908n3410nx3as1dx',
+  DEVELOPMENT_MODE,
+  COOKIE_EXPIRATION, //TODO: change this
 } = process.env;
 
 @Injectable()
 export class AuthService {
+  constructor(private jwtService: JwtService) {}
+
   generateCookie(email): [string, object] {
-    const token = this.generateJwtToken(email);
+    const token = this.jwtService.sign({ email });
 
     const cookieParams = {
-      secure: NODE_ENV !== 'development',
+      secure: !Boolean(DEVELOPMENT_MODE),
       httpOnly: true,
-      expires: cookieExpiration,
+      expires: COOKIE_EXPIRATION,
     };
 
     return [token, cookieParams];
-  }
-
-  generateJwtToken(email): string {
-    return jwt.sign({ email }, SECRET);
   }
 }
