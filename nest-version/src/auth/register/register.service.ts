@@ -7,9 +7,9 @@ import { sha512 } from 'js-sha512';
 export class RegisterService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async addNewUser(userDto: RegisterUserDto) {
+  async addNewUser(userDto: RegisterUserDto): Promise<any> {
     userDto.password = sha512(userDto.password);
     console.log(userDto);
-    await this.prisma.users.create({ data: userDto });
+    return await this.prisma.users.create({ data: userDto });
   }
 }

@@ -13,9 +13,11 @@ export class LoginController {
 
   @Post()
   async login(@Body() dto: LoginDto, @Res() res: Response) {
-    await this.loginService.login(dto.email, dto.password);
-    // TODO: check if everything is ok
-    const [token, cookieParams] = this.authService.generateCookie(dto.email);
+    const { id: userId } = await this.loginService.login(
+      dto.email,
+      dto.password,
+    );
+    const [token, cookieParams] = this.authService.generateCookie(userId);
     res
       .status(200)
       .cookie('jwt-auth', token, cookieParams)

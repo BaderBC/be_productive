@@ -13,12 +13,11 @@ export class RegisterController {
 
   @Post()
   async register(@Body() body: RegisterUserDto, @Res() res: Response) {
-    await this.registerService.addNewUser(body);
-    const cookie = this.authService.generateCookie(body.email);
-    // TODO: do the same as in login.controller.ts (destruct cookie)
+    const { id: userId } = await this.registerService.addNewUser(body);
+    const [token, cookieParams] = this.authService.generateCookie(userId);
     res
       .status(200)
-      .cookie('jwt-auth', ...cookie)
+      .cookie('jwt-auth', token, cookieParams)
       .send({ message: 'User created' });
   }
 }

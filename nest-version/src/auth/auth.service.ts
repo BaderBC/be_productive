@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { JwtDto } from "./dto/jwt.dto";
 
 const {
   DEVELOPMENT_MODE,
@@ -10,8 +11,9 @@ const {
 export class AuthService {
   constructor(private jwtService: JwtService) {}
 
-  generateCookie(email): [string, object] {
-    const token = this.jwtService.sign({ email });
+  generateCookie(userId: number): [string, object] {
+    const payload: JwtDto = { userId };
+    const token = this.jwtService.sign(payload);
 
     const cookieParams = {
       secure: !Boolean(DEVELOPMENT_MODE),

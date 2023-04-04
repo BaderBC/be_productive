@@ -6,6 +6,7 @@ import { DbModule } from './db/db.module';
 import { ActivitiesResolver } from './activities/activities.resolver';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ActivitiesModule } from './activities/activities.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
       driver: ApolloDriver,
       autoSchemaFile: true,
     }),
+    ActivitiesModule,
   ],
   controllers: [AppController],
   providers: [ActivitiesResolver],
