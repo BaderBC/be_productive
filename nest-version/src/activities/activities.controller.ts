@@ -1,9 +1,10 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Patch, Post, UseGuards } from '@nestjs/common';
 import { ActivitiesService } from './activities.service';
 import { AddActivityDto } from './dto/addActivity.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetJwt } from '../auth/decorator/getJwt.decorator';
 import { JwtDto } from '../auth/dto/jwt.dto';
+import { PatchActivityDto } from './dto/patchActivity.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('activities')
@@ -16,5 +17,32 @@ export class ActivitiesController {
     @GetJwt() jwt: JwtDto,
   ) {
     await this.activitiesService.addActivity(addActivityDto, jwt.userId);
+  }
+
+  @Patch()
+  async updateActivityInfo(
+    patchActivityDto: PatchActivityDto,
+    @GetJwt() jwt: JwtDto,
+  ) {
+    await this.activitiesService.updateActivityInfo(
+      patchActivityDto,
+      jwt.userId,
+    );
+  }
+
+  @Post('start')
+  async startActivity(
+    @GetJwt() jwt: JwtDto,
+    @Body('activityId') activityId: number,
+  ) {
+    await this.activitiesService.startActivity(jwt.userId, activityId);
+  }
+
+  @Post('stop')
+  async stopActivity(
+    @GetJwt() jwt: JwtDto,
+    @Body('activityId') activityId: number,
+  ) {
+    await this.activitiesService.stopActivity(jwt.userId, activityId);
   }
 }

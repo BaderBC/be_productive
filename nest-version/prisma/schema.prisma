@@ -8,7 +8,7 @@ datasource db {
 }
 
 model activities {
-  activity_id              Int     @id @default(autoincrement())
+  id                       Int     @id @default(autoincrement())
   name                     String  @db.VarChar(30)
   description              String? @db.VarChar(200)
   time_to_spend_weekly     Int
@@ -16,6 +16,7 @@ model activities {
   time_spent_ms            Int     @default(0)
   week_number_after_update Int?    @default(dbgenerated("date_part('week'::text, now())")) @db.SmallInt
   session_start            BigInt?
+  is_active                Boolean @default(false)
   users                    users   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@unique([user_id, name])
