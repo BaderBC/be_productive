@@ -1,4 +1,12 @@
-import { Body, Controller, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ActivitiesService } from './activities.service';
 import { AddActivityDto } from './dto/addActivity.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -21,7 +29,7 @@ export class ActivitiesController {
 
   @Patch()
   async updateActivityInfo(
-    patchActivityDto: PatchActivityDto,
+    @Body() patchActivityDto: PatchActivityDto,
     @GetJwt() jwt: JwtDto,
   ) {
     await this.activitiesService.updateActivityInfo(
@@ -35,6 +43,7 @@ export class ActivitiesController {
     @GetJwt() jwt: JwtDto,
     @Body('activityId') activityId: number,
   ) {
+    if (!activityId) throw new BadRequestException('No activityId provided');
     await this.activitiesService.startActivity(jwt.userId, activityId);
   }
 
@@ -43,6 +52,40 @@ export class ActivitiesController {
     @GetJwt() jwt: JwtDto,
     @Body('activityId') activityId: number,
   ) {
+    if (!activityId) throw new BadRequestException('No activityId provided');
     await this.activitiesService.stopActivity(jwt.userId, activityId);
+  }
+
+  @Post('stop_specific_time')
+  async stopActivitySpecificTime(
+    @GetJwt() jwt: JwtDto,
+    @Body('activityId') activityId: number,
+    @Body('time') time: number,
+  ) {
+    if (!activityId || time === undefined)
+      throw new BadRequestException('No activityId or time provided');
+    await this.activitiesService.stopActivitySpecificTime(
+      jwt.userId,
+      activityId,
+      time,
+    );
+  }
+
+  @Delete('session')
+  async cancelSession(
+    @GetJwt() jwt: JwtDto,
+    @Body('activityId') activityId: number,
+  ) {
+    if (!activityId) throw new BadRequestException('No activityId provided');
+    await this.activitiesService.cancelSession(jwt.userId, activityId);
+  }
+
+  @Delete()
+  async deleteActivity(
+    @GetJwt() jwt: JwtDto,
+    @Body('activityId') activityId: number,
+  ) {
+    if (!activityId) throw new BadRequestException('No activityId provided');
+    await this.activitiesService.deleteActivity(jwt.userId, activityId);
   }
 }

@@ -19,8 +19,10 @@ export class ActivitiesService {
   }
 
   async updateActivityInfo(patchActivityDto: PatchActivityDto, userId: number) {
+    const id = patchActivityDto.activityId;
+    delete patchActivityDto.activityId;
     await this.prisma.activities.updateMany({
-      where: { id: patchActivityDto.activityId, user_id: userId },
+      where: { id, user_id: userId },
       data: patchActivityDto,
     });
   }
@@ -33,7 +35,7 @@ export class ActivitiesService {
   }
 
   async stopActivity(userId: number, activityId: number) {
-    const activity = await this.prisma.activities.findUnique({
+    const activity = await this.prisma.activities.findUniqueOrThrow({
       where: { id: activityId },
     });
     await this.prisma.activities.updateMany({
@@ -47,6 +49,40 @@ export class ActivitiesService {
             activity.session_start,
         ),
       },
+    });
+  }
+
+  async stopActivitySpecificTime(
+    userId: number,
+    activityId: number,
+    time: number,
+  ) {
+    const activity = await this.prisma.activities.findUniqueOrThrow({
+      where: { id: activityId },
+    });
+    await this.prisma.activities.updateMany({
+      where: { id: activityId, user_id: userId, is_active: true },
+      data: {
+        session_start: null,
+        is_active: false,
+        time_spent_ms: activity.time_spent_ms + time,
+      },
+    });
+  }
+
+  async cancelSession(userId: number, activityId: number) {
+    await this.prisma.activities.updateMany({
+      where: { id: activityId, user_id: userId, is_active: true },
+      data: {
+        session_start: null,
+        is_active: false,
+      },
+    });
+  }
+
+  async deleteActivity(userId: number, activityId: number) {
+    await this.prisma.activities.deleteMany({
+      where: { id: activityId, user_id: userId },
     });
   }
 }

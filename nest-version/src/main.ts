@@ -5,11 +5,17 @@ import * as dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 
 dotenv.config();
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, NODE_ENV } = process.env;
 
 (async function () {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      enableDebugMessages: NODE_ENV === 'development',
+    }),
+  );
   await app.listen(PORT);
 })();

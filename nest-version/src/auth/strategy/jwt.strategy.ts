@@ -4,7 +4,7 @@ import { Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { JwtDto } from '../dto/jwt.dto';
 
-const { SECRET, DEVELOPMENT_MODE } = process.env;
+const { SECRET, NODE_ENV } = process.env;
 
 const extractFromCookie = (req: Request): string | null => {
   console.log(`\n\nRequest path: "${req.path}"`, req.cookies);
@@ -18,7 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     super({
       jwtFromRequest: extractFromCookie,
       secretOrKey: SECRET,
-      ignoreExpiration: Boolean(DEVELOPMENT_MODE),
+      ignoreExpiration: NODE_ENV === 'development',
     });
   }
 
