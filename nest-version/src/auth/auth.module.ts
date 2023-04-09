@@ -5,6 +5,7 @@ import { LoginModule } from './login/login.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
+import { GraphqlJwtStrategy } from './strategy/graphQl.jwt.strategy';
 
 const { SECRET: secret, JWT_EXPIRATION: expiresIn = '1d' } = process.env;
 
@@ -18,7 +19,7 @@ const { SECRET: secret, JWT_EXPIRATION: expiresIn = '1d' } = process.env;
       signOptions: { expiresIn },
     }),
   ],
-  providers: [AuthService, JwtStrategy],
-  exports: [AuthService, PassportModule, JwtStrategy],
+  providers: [AuthService, JwtStrategy, GraphqlJwtStrategy],
+  exports: [AuthService, PassportModule, JwtStrategy, GraphqlJwtStrategy],
 })
 export class AuthModule {}

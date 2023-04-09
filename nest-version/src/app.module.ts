@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { DbModule } from './db/db.module';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -17,6 +16,5 @@ import { ActivitiesModule } from './activities/activities.module';
     }),
     ActivitiesModule,
   ],
-  controllers: [AppController],
 })
 export class AppModule {}

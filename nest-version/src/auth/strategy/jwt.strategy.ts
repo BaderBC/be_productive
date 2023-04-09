@@ -7,7 +7,9 @@ import { JwtDto } from '../dto/jwt.dto';
 const { SECRET, NODE_ENV } = process.env;
 
 const extractFromCookie = (req: Request): string | null => {
-  console.log(`\n\nRequest path: "${req.path}"`, req.cookies);
+  if (NODE_ENV === 'development')
+    console.log(`\n\nRequest path: "${req.path}"`, req.cookies);
+
   if (req && req.cookies) return req.cookies['jwt-auth'];
   return null;
 };
@@ -22,8 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  validate(payload: JwtDto) {
-    console.log(`\n\nPayload: ${JSON.stringify(payload)}`);
+  validate(payload: JwtDto): JwtDto {
     return payload;
   }
 }
