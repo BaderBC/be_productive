@@ -2,10 +2,33 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../db/prisma/prisma.service';
 import { AddActivityDto } from './dto/addActivity.dto';
 import { PatchActivityDto } from './dto/patchActivity.dto';
+import { ActivityType } from './dto/activity.type';
 
 @Injectable()
 export class ActivitiesService {
   constructor(private prisma: PrismaService) {}
+
+  async getAllActivities(userId: number): Promise<ActivityType[]> {
+    const activities = await this.prisma.activities.findMany({
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        time_to_spend_weekly: true,
+        user_id: true,
+        time_spent_ms: true,
+        session_start: true,
+        is_active: true,
+      },
+      where: { user_id: userId },
+    });
+    return activities.map((activity): ActivityType => {
+      return {
+        ...activity,
+        session_start: Number(activity.session_start),
+      };
+    });
+  }
 
   async addActivity(addActivityDto: AddActivityDto, userId: number) {
     await this.prisma.activities.create({
