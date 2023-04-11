@@ -2,7 +2,3 @@
 .idea
 
 nest-version/node_modules
-express-version/node_modules
-
-express-version/pnpm-lock.yaml
-nest-version/pnpm-lock.yaml

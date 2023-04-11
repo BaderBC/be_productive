@@ -1,0 +1,8 @@
+{
+  "name": "be_productive",
+  "version": "0.0.1",
+  "repository": "https://github.com/BaderBC/be_productive",
+  "author": "Bartłomiej Strama <kontakt@bstrama.com>",
+  "license": "WTF-PL",
+  "private": false
+}
