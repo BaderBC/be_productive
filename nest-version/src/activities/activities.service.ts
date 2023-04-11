@@ -8,28 +8,6 @@ import { ActivityType } from './dto/activity.type';
 export class ActivitiesService {
   constructor(private prisma: PrismaService) {}
 
-  async getAllActivities(userId: number): Promise<ActivityType[]> {
-    const activities = await this.prisma.activities.findMany({
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        time_to_spend_weekly: true,
-        user_id: true,
-        time_spent_ms: true,
-        session_start: true,
-        is_active: true,
-      },
-      where: { user_id: userId },
-    });
-    return activities.map((activity): ActivityType => {
-      return {
-        ...activity,
-        session_start: Number(activity.session_start),
-      };
-    });
-  }
-
   async addActivity(addActivityDto: AddActivityDto, userId: number) {
     await this.prisma.activities.create({
       data: {
@@ -107,5 +85,45 @@ export class ActivitiesService {
     await this.prisma.activities.deleteMany({
       where: { id: activityId, user_id: userId },
     });
+  }
+
+  private fieldsToSelect = {
+    id: true,
+    name: true,
+    description: true,
+    time_to_spend_weekly: true,
+    user_id: true,
+    time_spent_ms: true,
+    session_start: true,
+    is_active: true,
+  };
+
+  private processActivity(activity: any): ActivityType {
+    return {
+      ...activity,
+      session_start: Number(activity.session_start),
+      time_spent_ms:
+        Number(activity.session_start) - Date.now() + activity.time_spent_ms,
+    };
+  }
+
+  async getAllActivities(userId: number): Promise<ActivityType[]> {
+    const activities = await this.prisma.activities.findMany({
+      select: this.fieldsToSelect,
+      where: { user_id: userId },
+    });
+    return activities.map(this.processActivity);
+  }
+
+  async getUnfinishedActivities(userId: number) {
+    const activities = await this.prisma.activities.findMany({
+      select: this.fieldsToSelect,
+      where: { user_id: userId },
+    });
+    return activities
+      .map(this.processActivity)
+      .filter(
+        (activity) => activity.time_to_spend_weekly > activity.time_spent_ms,
+      );
   }
 }

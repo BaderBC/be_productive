@@ -13,7 +13,11 @@ export class ActivitiesResolver {
 
   @Query(() => [ActivityType])
   allActivities(@GetJwt() jwt: JwtDto): Promise<ActivityType[]> {
-    //return 'test ' + JSON.stringify(jwt);
     return this.activitiesService.getAllActivities(jwt.userId);
+  }
+
+  @Query(() => [ActivityType])
+  unfinishedActivities(@GetJwt() jwt: JwtDto): Promise<ActivityType[]> {
+    return this.activitiesService.getUnfinishedActivities(jwt.userId);
   }
 }
