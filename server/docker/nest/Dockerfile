@@ -1,10 +1,11 @@
 FROM node:18
 
-ARG DATABASE_URL
-ARG SECRET
+# Default environment variables, please change them in production
 
+ENV DATABASE_URL="postgres://postgres:postgres@localhost:5432/be_productive"
+ENV SECRET="secret"
 ENV COOKIE_EXPIRATION=604800
-ENV NODE_ENV=production
+ENV NODE_ENV="production"
 
 RUN curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
 
@@ -16,5 +17,7 @@ RUN if [ "$NODE_ENV" = "production" ]; \
   then \
     pnpm build:prod; \
   fi
+
+EXPOSE 3000
 
 CMD ["pnpm", "start"]
