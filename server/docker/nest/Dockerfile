@@ -2,7 +2,13 @@ FROM node:18
 
 # Default environment variables, please change them in production
 
-ENV DATABASE_URL="postgres://postgres:postgres@localhost:5432/be_productive"
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=postgres
+ENV POSTGRES_DB=be_productive
+ENV POSTGRES_HOST=localhost
+# Prisma env:
+ENV DATABASE_URL="postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:5432/$POSTGRES_DB"
+
 ENV SECRET="secret"
 ENV COOKIE_EXPIRATION=604800
 ENV NODE_ENV="production"

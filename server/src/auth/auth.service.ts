@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { JwtDto } from "./dto/jwt.dto";
+import { JwtDto } from './dto/jwt.dto';
 
 const {
-  DEVELOPMENT_MODE,
+  NODE_ENV,
   COOKIE_EXPIRATION, //TODO: change this
 } = process.env;
 
@@ -16,9 +16,9 @@ export class AuthService {
     const token = this.jwtService.sign(payload);
 
     const cookieParams = {
-      secure: !Boolean(DEVELOPMENT_MODE),
+      secure: NODE_ENV === 'production',
       httpOnly: true,
-      expires: COOKIE_EXPIRATION,
+      expires: new Date(Date.now() + +COOKIE_EXPIRATION),
     };
 
     return [token, cookieParams];
