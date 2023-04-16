@@ -1,0 +1,8 @@
+services:
+  server:
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    command: pnpm start:dev

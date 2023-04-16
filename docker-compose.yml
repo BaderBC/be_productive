@@ -8,16 +8,16 @@ services:
     ports:
       - "3000:3000"
     environment:
-      COOKIES_EXPIRATION: 3600000
+      - COOKIES_EXPIRATION=3600000
     network_mode: "host"
   postgres_db:
     build:
       context: ./server
       dockerfile:  ./docker/postgres/Dockerfile
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: be_productive
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=be_productive
     ports:
       - "5432:5432"
     network_mode: "host"
