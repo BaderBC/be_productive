@@ -13,7 +13,7 @@ export class LoginController {
 
   @Post()
   async login(@Body() dto: LoginDto, @Res() res: Response) {
-    const { id: userId } = await this.loginService.login(
+    const { id: userId, email } = await this.loginService.login(
       dto.email,
       dto.password,
     );
@@ -21,6 +21,10 @@ export class LoginController {
     res
       .status(200)
       .cookie('jwt-auth', token, cookieParams)
+      .cookie(
+        'user-public-info',
+        ...this.authService.generatePublicUserInfoCookie({ userId, email }),
+      )
       .send({ message: 'Logged in' });
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { JwtDto } from './dto/jwt.dto';
+import { PublicUserInfoDto } from './dto/publicUserInfo.dto';
 
 const {
   NODE_ENV,
@@ -22,5 +23,17 @@ export class AuthService {
     };
 
     return [token, cookieParams];
+  }
+
+  generatePublicUserInfoCookie(
+    publicInfo: PublicUserInfoDto,
+  ): [string, object] {
+    const value = JSON.stringify(publicInfo);
+
+    const cookieParams = {
+      expires: new Date(Date.now() + +COOKIE_EXPIRATION),
+    };
+
+    return [value, cookieParams];
   }
 }
