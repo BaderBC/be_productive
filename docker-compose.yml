@@ -21,3 +21,10 @@ services:
     ports:
       - "5432:5432"
     network_mode: "host"
+  web-client:
+      build:
+          context: ./web-client
+      depends_on:
+          - server
+      ports:
+          - "4173:4173"

@@ -6,3 +6,12 @@ services:
       - ./server:/app
       - /app/node_modules
     command: pnpm start:dev
+  web-client:
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./web-client:/app
+      - /app/node_modules
+    command: pnpm dev --host
+    ports:
+      - "5173:5173"
