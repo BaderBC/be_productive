@@ -17,4 +17,4 @@ RUN if [ "$NODE_ENV" = "production" ]; \
 
 EXPOSE 4173
 
-CMD ["pnpm", "preview"]
+CMD ["pnpm", "preview", "--host"]
