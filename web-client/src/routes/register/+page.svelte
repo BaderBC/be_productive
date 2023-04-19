@@ -1,5 +1,5 @@
 <svelte:head>
-  <link rel="stylesheet" href="/default/default.css">
+  <link rel="stylesheet" href="/index.css">
   <title>Register</title>
 </svelte:head>
 

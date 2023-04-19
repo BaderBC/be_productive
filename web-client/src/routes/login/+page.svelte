@@ -1,27 +1,18 @@
 <svelte:head>
-  <link rel="stylesheet" href="/default/default.css">
+  <link rel="stylesheet" href="/index.css">
   <link rel="stylesheet" href="/login/login.css">
   <title>Login</title>
 </svelte:head>
 
-<div class="login-page">
+<div class="login-form">
   <h1>SIGN IN TO YOUR ACCOUNT</h1>
-
-  <div class="login-form">
-    <form on:submit|preventDefault={login}>
-      <div class="fields">
-        <div class="email">
-          <input placeholder="email@example.com" required type="email" name="email" id="email" bind:value={email} />
-        </div>
-        <div class="password">
-          <input placeholder="********" required type="password" name="password" id="password" bind:value={password} />
-        </div>
-      </div>
-      <div class="submit">
+  <form on:submit|preventDefault={login}>
+    <div class="fields">
+        <input placeholder="email@example.com" required type="email" name="email" id="email" bind:value={email} />
+        <input placeholder="********" required type="password" name="password" id="password" bind:value={password} />
         <button type="submit">Login</button>
-      </div>
-    </form>
-  </div>
+    </div>
+  </form>
 </div>
 
 <script lang="ts">

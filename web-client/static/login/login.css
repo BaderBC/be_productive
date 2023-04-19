@@ -1,22 +1,47 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
 
-.login-page {
+.login-form {
     color: #2b2b2e;
-    background-color: #d5d5d5;
+    background-color: #fff;
     font-family: 'Quicksand', sans-serif;
     padding: 20px 40px;
     font-size: 15px;
-}
-
-.fields {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border-radius: 5px;
 }
 
-.fields > input {
-    padding: 20px;
+.fields > input[type=email], .fields > input[type=password] {
+    padding: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 10px 0;
+    background-color: #e5e8ed;
+    border: none;
+    border-radius: 5px;
+}
+
+.fields > button {
+    background-color: #746bde;
+    border: none;
+    width: 100%;
+    padding: 16px;
+    margin: 30px 0;
+    border-radius: 5px;
+    font-family: 'Quicksand', sans-serif;
+    color: #fff;
+    font-weight: 1000;
+    font-size: 20px;
+}
+
+.fields > button:hover {
+    background-color: #5a51c9;
+}
+
+.fields > button:focus {
+    background-color: #4a41b9;
 }
 
 body {
