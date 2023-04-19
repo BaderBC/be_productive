@@ -11,9 +11,10 @@
     justify-content: center;
     align-items: center;
     border-radius: 5px;
+    width: 30%;
 }
 
-.fields > input[type=email], .fields > input[type=password] {
+.fields > input {
     padding: 16px;
     width: 100%;
     box-sizing: border-box;
