@@ -1,4 +1,9 @@
 body {
     background-color: #6a62d2;
     color: #d5d5d5;
+    margin: 0;
+}
+
+h1 {
+    margin: 0;
 }

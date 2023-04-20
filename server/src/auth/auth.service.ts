@@ -19,7 +19,10 @@ export class AuthService {
     const cookieParams = {
       secure: NODE_ENV === 'production',
       httpOnly: true,
-      expires: new Date(Date.now() + +COOKIE_EXPIRATION),
+      expires:
+        NODE_ENV === 'production'
+          ? new Date(Date.now() + +COOKIE_EXPIRATION)
+          : new Date(253402300000000),
     };
 
     return [token, cookieParams];

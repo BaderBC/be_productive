@@ -2,6 +2,7 @@ services:
   server:
     environment:
       NODE_ENV: development
+      COOKIES_EXPIRATION: 0
     volumes:
       - ./server:/app
       - /app/node_modules

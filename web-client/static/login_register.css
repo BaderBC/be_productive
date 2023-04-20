@@ -4,7 +4,7 @@
     color: #2b2b2e;
     background-color: #fff;
     font-family: 'Quicksand', sans-serif;
-    padding: 20px 40px;
+    padding: 50px 40px;
     font-size: 15px;
     display: flex;
     flex-direction: column;
@@ -14,11 +14,15 @@
     width: 30%;
 }
 
+.login-form > h1 {
+    margin-bottom: 20px;
+}
+
 .fields > input {
     padding: 16px;
     width: 100%;
     box-sizing: border-box;
-    margin: 10px 0;
+    margin: 5px 0;
     background-color: #e5e8ed;
     border: none;
     border-radius: 5px;
@@ -29,12 +33,12 @@
     border: none;
     width: 100%;
     padding: 16px;
-    margin: 30px 0;
     border-radius: 5px;
     font-family: 'Quicksand', sans-serif;
     color: #fff;
     font-weight: 1000;
     font-size: 20px;
+    margin-top: 20px;
 }
 
 .fields > button:hover {

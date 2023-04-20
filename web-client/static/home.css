@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.no-logged {
+    color: #2b2b2e;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.2rem;
+    background-color: #fff;
+    width: 40%;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: rgba(0, 0, 0, 0.25) 0 14px 28px, rgba(0, 0, 0, 0.22) 0 10px 10px;
+    box-sizing: border-box;
+}
+
+.about {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+.login-register {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 1.5rem;
+}
+
+.login-register > a {
+    text-decoration: none;
+    background-color: #746bde;
+    color: #fff;
+    padding: 1rem 4rem;
+    font-weight: 1000;
+    font-size: 1.2rem;
+    border-radius: 5px;
+}
+
+.about > h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.login-register > a:hover {
+    background-color: #5a51c9;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    width: 40%;
+}
+
+.add-activity {
+    padding: 0.25rem;
+    display: flex;
+    border-radius: 5px;
+    background-color: #e5e8ed;
+    margin: 1rem;
+    width: 70%;
+    height: 1.5rem;
+}
+
+.add-activity > input {
+    border-style: none;
+    flex-grow: 1;
+    background-color: #e5e8ed;
+    font-size: 1rem;
+}
+
+.add-activity > input:focus {
+    outline: none;
+}
+
+.add-activity > a {
+    text-align: center;
+    text-decoration: none;
+    background-color: #746bde;
+    border-style: none;
+    border-radius: 2px;
+    width: 2rem;
+    color: #fff;
+}
