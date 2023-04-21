@@ -34,7 +34,11 @@ export class AuthService {
     const value = JSON.stringify(publicInfo);
 
     const cookieParams = {
-      expires: new Date(Date.now() + +COOKIE_EXPIRATION),
+      httpOnly: false,
+      expires:
+        NODE_ENV === 'production'
+          ? new Date(Date.now() + +COOKIE_EXPIRATION)
+          : new Date(253402300000000),
     };
 
     return [value, cookieParams];

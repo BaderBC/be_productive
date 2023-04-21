@@ -102,8 +102,9 @@ export class ActivitiesService {
     return {
       ...activity,
       session_start: Number(activity.session_start),
-      time_spent_ms:
-        Number(activity.session_start) - Date.now() + activity.time_spent_ms,
+      time_spent_ms: activity.is_active
+        ? Number(activity.session_start) - Date.now() + activity.time_spent_ms
+        : activity.time_spent_ms,
     };
   }
 
