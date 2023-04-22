@@ -1,4 +1,8 @@
 services:
+  postgres_db:
+    build:
+      args:
+        - NODE_ENV=development
   server:
     environment:
       NODE_ENV: development
