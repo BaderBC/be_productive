@@ -15,7 +15,7 @@ model activities {
   user_id                  Int
   time_spent_ms            Int     @default(0)
   week_number_after_update Int?    @default(dbgenerated("date_part('week'::text, now())")) @db.SmallInt
-  session_start            BigInt?
+  session_start            DateTime?
   is_active                Boolean @default(false)
   users                    users   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 

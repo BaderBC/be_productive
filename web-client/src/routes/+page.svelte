@@ -7,6 +7,7 @@
       <input type="text" placeholder="Activity name">
       <a href="/add">+</a>
     </div>
+    <Activity />
   </div>
 
 {:else}
@@ -35,6 +36,7 @@
 <script lang="ts">
   import { getUser } from '../lib/getUser';
   import type { UserPublicInfo } from '../lib/getUser';
+  import Activity from '../lib/Activity.svelte';
 
   let user: UserPublicInfo | null = null;
 

@@ -31,7 +31,7 @@ export class ActivitiesService {
   async startActivity(userId: number, activityId: number) {
     await this.prisma.activities.updateMany({
       where: { id: activityId, user_id: userId, is_active: false },
-      data: { session_start: Date.now(), is_active: true },
+      data: { session_start: new Date(), is_active: true },
     });
   }
 
@@ -44,11 +44,10 @@ export class ActivitiesService {
       data: {
         session_start: null,
         is_active: false,
-        time_spent_ms: Number(
-          BigInt(activity.time_spent_ms) +
-            BigInt(Date.now()) -
-            activity.session_start,
-        ),
+        time_spent_ms:
+          activity.time_spent_ms +
+          Date.now() -
+          activity.session_start.getTime(),
       },
     });
   }
@@ -98,22 +97,11 @@ export class ActivitiesService {
     is_active: true,
   };
 
-  private processActivity(activity: any): ActivityType {
-    return {
-      ...activity,
-      session_start: Number(activity.session_start),
-      time_spent_ms: activity.is_active
-        ? Number(activity.session_start) - Date.now() + activity.time_spent_ms
-        : activity.time_spent_ms,
-    };
-  }
-
-  async getAllActivities(userId: number): Promise<ActivityType[]> {
-    const activities = await this.prisma.activities.findMany({
+  getAllActivities(userId: number): Promise<ActivityType[]> {
+    return this.prisma.activities.findMany({
       select: this.fieldsToSelect,
       where: { user_id: userId },
     });
-    return activities.map(this.processActivity);
   }
 
   async getUnfinishedActivities(userId: number) {
@@ -121,10 +109,8 @@ export class ActivitiesService {
       select: this.fieldsToSelect,
       where: { user_id: userId },
     });
-    return activities
-      .map(this.processActivity)
-      .filter(
-        (activity) => activity.time_to_spend_weekly > activity.time_spent_ms,
-      );
+    return activities.filter(
+      (activity) => activity.time_to_spend_weekly > activity.time_spent_ms,
+    );
   }
 }

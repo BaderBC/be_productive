@@ -1,6 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { GraphQLID } from 'graphql/type';
-import { GraphQLBigInt } from 'graphql-scalars';
+import { GraphQLDate } from 'graphql-scalars';
 
 @ObjectType()
 export class ActivityType {
@@ -9,13 +9,13 @@ export class ActivityType {
   @Field()
   name: string;
   @Field({ nullable: true })
-  description: string;
+  description: string | null;
   @Field(() => Int)
   time_to_spend_weekly: number;
-  @Field(() => GraphQLBigInt)
+  @Field(() => Int)
   time_spent_ms: number;
-  @Field(() => GraphQLBigInt)
-  session_start: number;
+  @Field(() => GraphQLDate, { nullable: true })
+  session_start: Date | null;
   @Field()
   is_active: boolean;
 }

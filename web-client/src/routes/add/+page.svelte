@@ -3,12 +3,12 @@
 <div class="main">
   <h1>ADD ACTIVITY</h1>
 
-  <form>
+  <form on:submit|preventDefault={addActivity}>
     <input type="text" required placeholder="name" bind:value={activityName}>
     <input type="text" placeholder="description" bind:value={activityDescription}>
     <input type="number" required placeholder="number of hours you want to spend weekly" bind:value={activityTimeWeekly}>
 
-    <button type="submit" on:click={addActivity}>ADD</button>
+    <button type="submit">ADD</button>
   </form>
 </div>
 
@@ -30,7 +30,7 @@
       credentials: 'include',
       body: JSON.stringify({
         name: activityName,
-        description: activityDescription,
+        description: activityDescription || null,
         time_to_spend_weekly: activityTimeWeekly,
       }),
     });
