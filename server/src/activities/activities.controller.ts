@@ -35,6 +35,7 @@ export class ActivitiesController {
     await this.activitiesService.updateActivityInfo(
       patchActivityDto,
       jwt.userId,
+      jwt.timezone,
     );
   }
 
@@ -44,7 +45,11 @@ export class ActivitiesController {
     @Body('activityId') activityId: number,
   ) {
     if (!activityId) throw new BadRequestException('No activityId provided');
-    await this.activitiesService.startActivity(jwt.userId, activityId);
+    await this.activitiesService.startActivity(
+      jwt.userId,
+      activityId,
+      jwt.timezone,
+    );
   }
 
   @Post('stop')
@@ -53,7 +58,11 @@ export class ActivitiesController {
     @Body('activityId') activityId: number,
   ) {
     if (!activityId) throw new BadRequestException('No activityId provided');
-    await this.activitiesService.stopActivity(jwt.userId, activityId);
+    await this.activitiesService.stopActivity(
+      jwt.userId,
+      activityId,
+      jwt.timezone,
+    );
   }
 
   @Post('stop_specific_time')
@@ -64,9 +73,10 @@ export class ActivitiesController {
   ) {
     if (!activityId || time === undefined)
       throw new BadRequestException('No activityId or time provided');
-    await this.activitiesService.stopActivitySpecificTime(
+    await this.activitiesService.stopActivity(
       jwt.userId,
       activityId,
+      jwt.timezone,
       time,
     );
   }

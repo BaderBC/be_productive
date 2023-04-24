@@ -8,25 +8,40 @@ datasource db {
 }
 
 model activities {
-  id                       Int     @id @default(autoincrement())
-  name                     String  @db.VarChar(30)
-  description              String? @db.VarChar(200)
-  time_to_spend_weekly     Int
-  user_id                  Int
-  time_spent_ms            Int     @default(0)
-  week_number_after_update Int?    @default(dbgenerated("date_part('week'::text, now())")) @db.SmallInt
-  session_start            DateTime?
-  is_active                Boolean @default(false)
-  users                    users   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id                    Int                     @id @default(autoincrement())
+  name                  String                  @db.VarChar(30)
+  description           String?                 @db.VarChar(200)
+  time_to_spend_weekly  Int
+  user_id               Int
+  users                 users                   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  activity_week_session activity_week_session[]
 
   @@unique([user_id, name])
+}
+
+// Each week user use new activity session, I separete this into new table, because I want to have history of user activities
+model activity_week_session {
+  id          Int @id @default(autoincrement())
+  activity_id Int
+
+  time_to_spend_weekly Int // I use 2 time this field, because parent table includes default value and this field is in case if user change this field in future
+  time_spent_ms        Int       @default(0)
+  session_start        DateTime?
+  is_active            Boolean   @default(false)
+
+  week_number Int        @default(dbgenerated("date_part('week'::text, now())")) @db.SmallInt
+  year        Int        @default(dbgenerated("date_part('year'::text, now())")) @db.SmallInt
+  activities  activities @relation(fields: [activity_id], references: [id], onDelete: Cascade)
+
+  @@unique([activity_id, week_number, year])
 }
 
 model users {
   id         Int          @id @default(autoincrement())
   email      String       @unique
+  password   String
   firstname  String?      @db.VarChar(40)
   lastname   String?      @db.VarChar(40)
-  password   String
+  timezone   String
   activities activities[]
 }

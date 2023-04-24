@@ -12,8 +12,8 @@ const {
 export class AuthService {
   constructor(private jwtService: JwtService) {}
 
-  generateCookie(userId: number): [string, object] {
-    const payload: JwtDto = { userId };
+  generateCookie(userId: number, timezone: string): [string, object] {
+    const payload: JwtDto = { userId, timezone };
     const token = this.jwtService.sign(payload);
 
     const cookieParams = {

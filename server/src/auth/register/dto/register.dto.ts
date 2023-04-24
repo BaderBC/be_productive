@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsTimezone } from '../../../utils/is-timezone.validator';
 
 export class RegisterUserDto {
   @IsOptional()
@@ -10,4 +11,8 @@ export class RegisterUserDto {
   email: string;
   @IsNotEmpty()
   password: string;
+  @IsNotEmpty()
+  @IsString()
+  @IsTimezone()
+  timezone: string;
 }

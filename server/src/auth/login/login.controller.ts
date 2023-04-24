@@ -13,11 +13,17 @@ export class LoginController {
 
   @Post()
   async login(@Body() dto: LoginDto, @Res() res: Response) {
-    const { id: userId, email } = await this.loginService.login(
-      dto.email,
-      dto.password,
+    const {
+      id: userId,
+      email,
+      payload,
+    } = await this.loginService.login(dto.email, dto.password);
+
+    const [token, cookieParams] = this.authService.generateCookie(
+      userId,
+      payload,
     );
-    const [token, cookieParams] = this.authService.generateCookie(userId);
+
     res
       .status(200)
       .cookie('jwt-auth', token, cookieParams)

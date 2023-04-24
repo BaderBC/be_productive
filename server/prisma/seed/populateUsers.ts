@@ -10,6 +10,7 @@ export async function populateUsers() {
         lastname: 'Strama',
         email: 'kontakt@bstrama.com',
         password: sha512('12345678'),
+        timezone: 'Europe/Warsaw',
       },
       {
         id: 2,
@@ -17,6 +18,7 @@ export async function populateUsers() {
         lastname: 'test-lastname',
         email: 'test@test.test',
         password: sha512('12345678'),
+        timezone: 'Europe/Warsaw',
       },
       {
         id: 3,
@@ -24,6 +26,7 @@ export async function populateUsers() {
         lastname: 'test-lastname2',
         email: 'test@example.com',
         password: sha512('12345678'),
+        timezone: 'Europe/Berlin',
       },
     ],
     skipDuplicates: true,
