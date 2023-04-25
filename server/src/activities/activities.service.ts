@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from '../db/prisma/prisma.service';
 import { AddActivityDto } from './dto/addActivity.dto';
 import { PatchActivityDto } from './dto/patchActivity.dto';
@@ -127,8 +131,10 @@ export class ActivitiesService {
 
     const time_spent_ms =
       time_spent_override || time_spent_override === 0
-      ? time_spent_override + activity.time_spent_ms
-      : activity.time_spent_ms + Date.now() - activity.session_start.getTime();
+        ? time_spent_override + activity.time_spent_ms
+        : activity.time_spent_ms +
+          Date.now() -
+          activity.session_start.getTime();
 
     await this.prisma.activity_week_session.update({
       where: {
@@ -177,9 +183,9 @@ export class ActivitiesService {
   }
 
   async getUnfinishedActivities(userId: number) {
-    const activities = await this.prisma.activities.findMany({
+    const activities = await this.prisma.activity_week_session.findMany({
       select: this.fieldsToSelect,
-      where: { user_id: userId },
+      where: { activities: { user_id: userId } },
     });
     const processedActivities = this.processActivities(activities);
 
