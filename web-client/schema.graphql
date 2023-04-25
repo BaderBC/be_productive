@@ -1,0 +1,19 @@
+type ActivityType {
+  description: String
+  id: ID!
+  is_active: Boolean!
+  name: String!
+  session_start: Date
+  time_spent_ms: Int!
+  time_to_spend_weekly: Int!
+}
+
+"""
+A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar Date
+
+type Query {
+  allActivities: [ActivityType!]!
+  unfinishedActivities: [ActivityType!]!
+}
