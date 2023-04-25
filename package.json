@@ -4,5 +4,9 @@
   "repository": "https://github.com/BaderBC/be_productive",
   "author": "Bartłomiej Strama <kontakt@bstrama.com>",
   "license": "WTF-PL",
-  "private": false
+  "private": false,
+  "scripts": {
+    "start": "docker compose up",
+    "dev": "docker compose -f ./docker-compose.yml -f ./docker-compose.dev.yml up"
+  }
 }

@@ -1,8 +1,8 @@
 import prisma from './prisma.module';
 import { sha512 } from 'js-sha512';
 
-export async function populateUsers() {
-  await prisma.users.createMany({
+export function populateUsers() {
+  return prisma.users.createMany({
     data: [
       {
         id: 1,
