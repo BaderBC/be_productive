@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../db/prisma/prisma.service';
 import { AddActivityDto } from './dto/addActivity.dto';
 import { PatchActivityDto } from './dto/patchActivity.dto';
@@ -110,21 +110,33 @@ export class ActivitiesService {
           week_number: local_date.week(),
         },
       },
+      select: {
+        time_spent_ms: true,
+        is_active: true,
+        session_start: true,
+        activities: {
+          select: { user_id: true },
+        },
+      },
     });
 
     if (!activity.is_active)
       throw new BadRequestException('Activity is already stopped');
+    if (activity.activities.user_id !== userId)
+      throw new UnauthorizedException('You are not the owner of this activity');
 
-    const time_spent_ms = time_spent_override
-      ? time_spent_override
+    const time_spent_ms =
+      time_spent_override || time_spent_override === 0
+      ? time_spent_override + activity.time_spent_ms
       : activity.time_spent_ms + Date.now() - activity.session_start.getTime();
 
-    await this.prisma.activity_week_session.updateMany({
+    await this.prisma.activity_week_session.update({
       where: {
-        id: activityId,
-        is_active: true,
-        activities: { user_id: userId },
-        week_number: local_date.week(),
+        activity_id_week_number_year: {
+          activity_id: activityId,
+          year: local_date.year(),
+          week_number: local_date.week(),
+        },
       },
       data: {
         session_start: null,

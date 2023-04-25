@@ -45,7 +45,8 @@
         email,
         password,
         name,
-        surname
+        surname,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       }),
       credentials: 'include'
     });
