@@ -36,7 +36,7 @@
 <script lang="ts">
   import { getUser } from '../lib/getUser';
   import type { UserPublicInfo } from '../lib/getUser';
-  import Activity from '../lib/Activity.svelte';
+  import Activity from '../lib/Activity/Activity.svelte';
 
   let user: UserPublicInfo | null = null;
 

@@ -1,8 +1,7 @@
-import { HoudiniClient } from '$houdini';
+import { ApolloClient, InMemoryCache } from "@apollo/client/core";
 
-export default new HoudiniClient({
-    url: 'http://localhost:3000/graphql',
-    fetchParams() { 
-        return { credentials: 'include' };
-    }
+export const client = new ApolloClient({
+  uri: import.meta.env.VITE_GRAPHQL_URL,
+  credentials: `include`,
+  cache: new InMemoryCache(),
 });

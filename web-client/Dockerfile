@@ -4,6 +4,7 @@ FROM node:18
 
 ENV NODE_ENV="production"
 ENV VITE_BACKEND_URL="http://localhost:3000"
+ENV VITE_GRAPHQL_URL="$VITE_BACKEND_URL/graphql"
 
 RUN curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
 
