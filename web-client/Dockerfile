@@ -12,6 +12,7 @@ WORKDIR /app
 COPY . .
 
 RUN NODE_ENV=development pnpm i
+
 RUN if [ "$NODE_ENV" = "production" ]; \
   then \
     pnpm build:prod; \
