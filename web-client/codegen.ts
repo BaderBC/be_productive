@@ -1,16 +1,11 @@
-import type { CodegenConfig } from '@graphql-codegen/cli'
-import * as dotenv from 'dotenv';
-
-dotenv.config()
+import type {CodegenConfig} from '@graphql-codegen/cli'
 
 const config: CodegenConfig = {
-  schema: process.env.VITE_GRAPHQL_URL,
-  //documents: './src/**/*.gql',
-  documents: process.env.VITE_GRAPHQL_DOCUMENTS,
-  generates: {
-    './graphql/generated.ts': {
-      plugins: ['typescript', 'typescript-operations', 'graphql-codegen-svelte-apollo']
+    schema: "./schema.graphql",
+    generates: {
+        './graphql/generated.ts': {
+            plugins: ['typescript', 'typescript-operations'],
+        }
     }
-  }
 }
 export default config
