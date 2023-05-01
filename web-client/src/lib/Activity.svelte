@@ -4,7 +4,8 @@
     export let activity: ActivityType;
     let time_spent: number;
     let progress: number;
-    $: {
+
+    const refreshProgressBar = () => {
         time_spent =
             activity.time_spent_ms
             + Date.now()
@@ -12,9 +13,9 @@
         
         progress = time_spent / activity.time_to_spend_weekly;
         if (progress > 100) progress = 100;
-        
-        console.log(time_spent, progress);
-    }
+    };
+    refreshProgressBar();
+    setInterval(refreshProgressBar, 1000);
 </script>
 
 <div class="activity">
