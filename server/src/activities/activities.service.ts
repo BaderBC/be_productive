@@ -9,6 +9,10 @@ import { PatchActivityDto } from './dto/patchActivity.dto';
 import { ActivityType } from './dto/activity.type';
 import moment from 'moment-timezone';
 
+interface CreateActivitySessionInterface {
+  id: number;
+  time_to_spend_weekly: number;
+}
 @Injectable()
 export class ActivitiesService {
   // TODO: when creating a new week_session_activity remove activity saves older than 1 year
@@ -172,22 +176,57 @@ export class ActivitiesService {
     });
   }
 
-  async getAllActivities(userId: number): Promise<ActivityType[]> {
-    const activities = await this.prisma.activity_week_session.findMany({
-      //select: this.fieldsToSelect,
-      select: this.fieldsToSelect,
-      where: { activities: { user_id: userId } },
-    });
+  async getAllActivities(
+    userId: number,
+    timezone: string,
+  ): Promise<ActivityType[]> {
+    const [activities, activitiesWithNoSession] =
+      await this.prisma.$transaction([
+        this.prisma.activity_week_session.findMany({
+          select: this.fieldsToSelect,
+          where: { activities: { user_id: userId } },
+        }),
+        this.getActivitiesWithNoSession(userId, timezone),
+      ]);
 
-    return this.processActivities(activities);
+    if (activitiesWithNoSession.length === 0)
+      return this.processActivities(activities);
+    const createdActivities = await this.createNewActivitiesSession(
+      activitiesWithNoSession,
+      userId,
+      timezone,
+    );
+    return this.processActivities(createdActivities);
   }
 
-  async getUnfinishedActivities(userId: number) {
-    const activities = await this.prisma.activity_week_session.findMany({
-      select: this.fieldsToSelect,
-      where: { activities: { user_id: userId } },
-    });
-    const processedActivities = this.processActivities(activities);
+  async getUnfinishedActivities(userId: number, timezone: string) {
+    const {
+      prisma,
+      getActivitiesWithNoSession,
+      fieldsToSelect,
+      createNewActivitiesSession,
+      processActivities,
+    } = this;
+    const [activities, activitiesWithNoSession] = await prisma.$transaction([
+      prisma.activity_week_session.findMany({
+        select: fieldsToSelect,
+        where: { activities: { user_id: userId } },
+      }),
+      getActivitiesWithNoSession(userId, timezone),
+    ]);
+
+    let processedActivities: ActivityType[];
+
+    if (activitiesWithNoSession.length === 0) {
+      processedActivities = processActivities(activities);
+    } else {
+      const createdActivities = await createNewActivitiesSession(
+        activitiesWithNoSession,
+        userId,
+        timezone,
+      );
+      processedActivities = processActivities(createdActivities);
+    }
 
     return processedActivities.filter(
       (activity) => activity.time_to_spend_weekly > activity.time_spent_ms,
@@ -202,6 +241,50 @@ export class ActivitiesService {
 
       return activity as ActivityType;
     });
+  }
+
+  private getActivitiesWithNoSession(userId: number, timezone: string) {
+    const local_date = moment.tz(timezone);
+    return this.prisma.activities.findMany({
+      select: {
+        id: true,
+        time_to_spend_weekly: true,
+      },
+      where: {
+        user_id: userId,
+        activity_week_session: {
+          none: {
+            week_number: local_date.week(),
+            year: local_date.year(),
+          },
+        },
+      },
+    });
+  }
+
+  private async createNewActivitiesSession(
+    activitiesWithNoSession: CreateActivitySessionInterface[],
+    userId: number,
+    timezone: string,
+  ) {
+    const local_date = moment.tz(timezone);
+    // TODO: There is already issue in prisma repo to add createManyAndReturn method, when it will be added, this should be changed
+    const [, activities] = await this.prisma.$transaction([
+      this.prisma.activity_week_session.createMany({
+        data: activitiesWithNoSession.map((activity) => ({
+          activity_id: activity.id,
+          time_to_spend_weekly: activity.time_to_spend_weekly,
+          week_number: local_date.week(),
+          year: local_date.year(),
+        })),
+        skipDuplicates: true,
+      }),
+      this.prisma.activity_week_session.findMany({
+        select: this.fieldsToSelect,
+        where: { activities: { user_id: userId } },
+      }),
+    ]);
+    return activities;
   }
 
   private async getTimeToSpendWeekly(activityId: number): Promise<number> {
