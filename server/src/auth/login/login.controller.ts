@@ -16,12 +16,12 @@ export class LoginController {
     const {
       id: userId,
       email,
-      payload,
+      timezone,
     } = await this.loginService.login(dto.email, dto.password);
 
     const [token, cookieParams] = this.authService.generateCookie(
       userId,
-      payload,
+      timezone,
     );
 
     res
