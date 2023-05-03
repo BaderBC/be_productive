@@ -1,12 +1,13 @@
 <script lang="ts">
     import type {ActivityType} from "../../graphql/generated";
-    import {SvelteComponent} from "svelte";
 
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
     export let activity: ActivityType;
     // variables bellow are destructured because they need to be writeable, but activity is read-only
     let {is_active, time_spent_ms, session_start} = activity;
+
+    console.log(activity);
 
     let time_spent: number = time_spent_ms;
     let progress: number = 0;
@@ -50,6 +51,30 @@
         is_active = false;
         time_spent_ms = time_spent;
     }
+
+    function msIntoTime(time_ms: number) {
+        const hours = Math.floor(time_ms / 1000 / 60 / 60);
+        const minutes = Math.floor(time_ms / 1000 / 60) % 60;
+        const seconds = Math.floor(time_ms / 1000) % 60;
+        let time = "";
+        
+        if (hours) {
+            time += `${hours}h `;
+        }
+        if ((hours && minutes) || (hours && seconds)) {
+            time += `${minutes}m `;
+        }
+        if (seconds) {
+            time += `${seconds}s`;
+        }
+        
+        time = time.trim();
+        if (!time) {
+            time = "0s";
+        }
+
+        return time;
+    }
 </script>
 
 <div class="activity">
@@ -58,10 +83,10 @@
         <div class="activity-progress-bar" style="width: {progress}%"></div>
     </div>
     <div class="right_side">
-        <div class="time-spent">
-            <!--
-            TODO: add timer e.g.  2h/4h 30m spent
-            -->
+        <div class="timer">
+            <span>{msIntoTime(time_spent)}</span>
+            <hr>
+            <span>{msIntoTime(activity.time_to_spend_weekly)}</span>
         </div>
         <div class="start_stop">
             {#if is_active}
@@ -122,9 +147,10 @@
         position: relative;
         border-radius: 4px;
     }
-    
+
     .right_side {
         display: flex;
+        color: #2b2b2e;
     }
 
     .start_stop {
@@ -134,9 +160,11 @@
     }
 
     .start_stop > button {
+        display: flex;
         border: none;
         padding: 0;
         background-color: transparent;
+        justify-content: center;
     }
 
     .start_activity {
@@ -158,5 +186,10 @@
     .start_stop > button > svg {
         width: 3em;
         height: 3em;
+    }
+    
+    .timer {
+        text-align: center;
+        width: 6em;
     }
 </style>
