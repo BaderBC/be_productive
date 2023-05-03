@@ -18,13 +18,13 @@ export class ActivitiesService {
   // TODO: when creating a new week_session_activity remove activity saves older than 1 year
 
   private fieldsToSelect = {
-    id: true,
     time_to_spend_weekly: true,
     time_spent_ms: true,
     session_start: true,
     is_active: true,
     activities: {
       select: {
+        id: true,
         name: true,
         description: true,
       },
@@ -200,32 +200,26 @@ export class ActivitiesService {
   }
 
   async getUnfinishedActivities(userId: number, timezone: string) {
-    const {
-      prisma,
-      getActivitiesWithNoSession,
-      fieldsToSelect,
-      createNewActivitiesSession,
-      processActivities,
-    } = this;
-    const [activities, activitiesWithNoSession] = await prisma.$transaction([
-      prisma.activity_week_session.findMany({
-        select: fieldsToSelect,
-        where: { activities: { user_id: userId } },
-      }),
-      getActivitiesWithNoSession(userId, timezone),
-    ]);
+    const [activities, activitiesWithNoSession] =
+      await this.prisma.$transaction([
+        this.prisma.activity_week_session.findMany({
+          select: this.fieldsToSelect,
+          where: { activities: { user_id: userId } },
+        }),
+        this.getActivitiesWithNoSession(userId, timezone),
+      ]);
 
     let processedActivities: ActivityType[];
 
     if (activitiesWithNoSession.length === 0) {
-      processedActivities = processActivities(activities);
+      processedActivities = this.processActivities(activities);
     } else {
-      const createdActivities = await createNewActivitiesSession(
+      const createdActivities = await this.createNewActivitiesSession(
         activitiesWithNoSession,
         userId,
         timezone,
       );
-      processedActivities = processActivities(createdActivities);
+      processedActivities = this.processActivities(createdActivities);
     }
 
     return processedActivities.filter(
@@ -237,6 +231,7 @@ export class ActivitiesService {
     return activities.map((activity: any) => {
       activity.name = activity.activities.name;
       activity.description = activity.activities.description;
+      activity.id = activity.activities.id;
       delete activity.activities;
 
       return activity as ActivityType;
