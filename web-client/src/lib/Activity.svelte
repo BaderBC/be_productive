@@ -1,5 +1,6 @@
 <script lang="ts">
     import type {ActivityType} from "../../graphql/generated";
+    import {SvelteComponent} from "svelte";
 
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -56,22 +57,29 @@
         <span>{activity.name}</span>
         <div class="activity-progress-bar" style="width: {progress}%"></div>
     </div>
-    <div class="start_stop">
-        {#if is_active}
-            <button class="stop_activity" on:click={stopActivity}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                     class="bi bi-stop-fill" viewBox="0 0 16 16">
-                    <path d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"/>
-                </svg>
-            </button>
-        {:else}
-            <button class="start_activity" on:click={startActivity}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                     class="bi bi-play-fill" viewBox="0 0 16 16">
-                    <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
-                </svg>
-            </button>
-        {/if}
+    <div class="right_side">
+        <div class="time-spent">
+            <!--
+            TODO: add timer e.g.  2h/4h 30m spent
+            -->
+        </div>
+        <div class="start_stop">
+            {#if is_active}
+                <button class="stop_activity" on:click={stopActivity}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-stop-fill" viewBox="0 0 16 16">
+                        <path d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"/>
+                    </svg>
+                </button>
+            {:else}
+                <button class="start_activity" on:click={startActivity}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-play-fill" viewBox="0 0 16 16">
+                        <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+                    </svg>
+                </button>
+            {/if}
+        </div>
     </div>
 </div>
 
@@ -113,6 +121,10 @@
         height: 3em;
         position: relative;
         border-radius: 4px;
+    }
+    
+    .right_side {
+        display: flex;
     }
 
     .start_stop {

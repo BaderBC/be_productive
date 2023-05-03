@@ -1,11 +1,21 @@
 <link rel="stylesheet" href="/home.css">
 
+<script lang="ts">
+  
+  import { getUser } from '$lib/getUser';
+  import AllActivities from '$lib/AllActivities.svelte';
+
+  let user = getUser() || null;
+  let nameOfActivityToAdd: string = '';
+
+</script>
+
 {#if user}
   
   <div class="main">
     <div class="add-activity">
-      <input type="text" placeholder="Activity name">
-      <a href="/add">+</a>
+      <input type="text" placeholder="Activity name" bind:value={nameOfActivityToAdd} />
+      <a href="/add?name={nameOfActivityToAdd}">+</a>
     </div>
     <AllActivities />
   </div>
@@ -32,14 +42,8 @@
   </div>
 {/if}
 
-
-<script lang="ts">
-  import { getUser } from '$lib/getUser';
-  import type { UserPublicInfo } from '$lib/getUser';
-  import AllActivities from '$lib/AllActivities.svelte';
-
-  let user: UserPublicInfo | null;
-
-  user = getUser() || null;
-
-</script>
+<style>
+  .main {
+    border-radius: 5px;
+  }
+</style>

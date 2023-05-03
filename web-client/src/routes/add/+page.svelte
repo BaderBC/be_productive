@@ -14,10 +14,11 @@
 
 <script lang="ts">
   import { goto } from '$app/navigation';
-
+  import { page } from "$app/stores";
+  
   const { VITE_BACKEND_URL } = import.meta.env;
-
-  let activityName = '';
+  
+  let activityName = $page.url.searchParams.get('name');
   let activityDescription = '';
   let activityTimeWeekly = 0;
 
@@ -34,7 +35,7 @@
         time_to_spend_weekly: activityTimeWeekly,
       }),
     });
-    await goto('/');
+    await goto('/', { invalidateAll: true });
   }
 
 </script>
