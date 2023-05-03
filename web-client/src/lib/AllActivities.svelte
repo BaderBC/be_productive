@@ -7,51 +7,43 @@
     const activities_query = gql`
     query {
         allActivities {
+            id
             name
             description
             time_spent_ms
             time_to_spend_weekly
             session_start
+            is_active
         }
     }
   `;
     
-    /*
-    interface ActivityWithStats extends ActivityType {
-        progress: number;
-        time_spent: number;
-    }
-    */
-
     let activities: Promise<ActivityType[]> =
         client
             .query({query: activities_query})
             .then(res => res.data);
-/*
-    $: {
-        activities = activities
-            .then(a =>
-                a.map((data: ActivityWithStats) => {
-                    data.time_spent =
-                        data.time_spent_ms
-                        + Date.now()
-                        - (new Date(data.session_start)).getTime();
-                    data.progress = time_spent / data.time_to_spend_weekly;
-                    return progress;
-                })
-            )
-        ;
-    }
- */
 
 </script>
 
 {#await activities}
     <p>loading...</p>
 {:then data}
+    <div class="activities">
     {#each data.allActivities as activity}
-        <Activity activity={activity} />
+            <Activity activity={activity} />
     {/each}
+    </div>
 {:catch error}
     <p>{error.message}</p>
 {/await}
+
+<style>
+    .activities {
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0.5em 1em;
+    }
+</style>
