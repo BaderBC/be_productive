@@ -4,10 +4,9 @@
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
     export let activity: ActivityType;
+    export let progress_type: "percentages" | "units" = "percentages";
     // variables bellow are destructured because they need to be writeable, but activity is read-only
     let {is_active, time_spent_ms, session_start} = activity;
-
-    console.log(activity);
 
     let time_spent: number = time_spent_ms;
     let progress: number = 0;
@@ -84,9 +83,13 @@
     </div>
     <div class="right_side">
         <div class="timer">
-            <span>{msIntoTime(time_spent)}</span>
-            <hr>
-            <span>{msIntoTime(activity.time_to_spend_weekly)}</span>
+            {#if progress_type === "percentages"}
+                <span>{progress.toFixed(2)}%</span>
+            {:else}
+                <span>{msIntoTime(time_spent)}</span>
+                <hr>
+                <span>{msIntoTime(activity.time_to_spend_weekly)}</span>
+            {/if}
         </div>
         <div class="start_stop">
             {#if is_active}
@@ -110,7 +113,7 @@
 
 <style>
     .activity {
-        background-color: #e5e8ed;
+        background-color: #f0f0f0;
         width: 100%;
         margin: 0.5em;
         padding: 1em;
@@ -191,5 +194,13 @@
     .timer {
         text-align: center;
         width: 6em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .timer > hr {
+        width: 100%;
     }
 </style>

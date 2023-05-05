@@ -3,6 +3,8 @@
     import {client} from "../client";
     import type {ActivityType} from "../../graphql/generated";
     import Activity from "$lib/Activity.svelte";
+    
+    export let progress_type: "percentages" | "units" = "percentages";
 
     const activities_query = gql`
     query {
@@ -30,7 +32,7 @@
 {:then data}
     <div class="activities">
     {#each data.allActivities as activity}
-            <Activity activity={activity} />
+            <Activity activity={activity} progress_type={progress_type} />
     {/each}
     </div>
 {:catch error}
