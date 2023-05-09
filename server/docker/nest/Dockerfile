@@ -1,17 +1,6 @@
 FROM node:18
 
-# Default environment variables, please change them in production
-
-ENV POSTGRES_USER=postgres
-ENV POSTGRES_PASSWORD=postgres
-ENV POSTGRES_DB=be_productive
-ENV POSTGRES_HOST=localhost
-# Prisma env:
-ENV DATABASE_URL="postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:5432/$POSTGRES_DB"
-
-ENV SECRET="secret"
-ENV COOKIE_EXPIRATION=604800
-ENV NODE_ENV="production"
+ARG NODE_ENV
 
 RUN curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
 

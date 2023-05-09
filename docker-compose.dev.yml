@@ -1,19 +1,36 @@
 services:
   postgres_db:
     build:
+      context: ./server
+      dockerfile:  ./docker/postgres/Dockerfile
       args:
         - NODE_ENV=development
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=be_productive
+    ports:
+      - "5432:5432"
+    network_mode: "host"
   server:
+    build:
+      args:
+        - NODE_ENV=development
     environment:
-      NODE_ENV: development
-      COOKIES_EXPIRATION: 0
+      - COOKIES_EXPIRATION=0
+      - DATABASE_URL=postgres://postgres:postgres@localhost:5432/be_productive
+      - SECRET=secret
     volumes:
       - ./server:/app
       - /app/node_modules
     command: pnpm start:dev
+    depends_on:
+      - postgres_db
   web-client:
+    build:
+        args:
+            - NODE_ENV=development
     environment:
-      NODE_ENV: development
+      - VITE_BACKEND_URL=http://localhost:3000
     volumes:
       - ./web-client:/app
       - /app/node_modules
