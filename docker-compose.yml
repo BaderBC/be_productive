@@ -11,9 +11,9 @@ services:
       - SECRET=${SECRET}
     ports:
       - "3000:3000"
-    #networks:
-    #  - network
-    network_mode: host
+    networks:
+      - network
+    hostname: server
   web-client:
     build:
       context: ./web-client
@@ -21,14 +21,14 @@ services:
       args:
         - NODE_ENV=production
     environment:
-      - VITE_BACKEND_URL="${HOST_URL:-localhost}/api"
+      - VITE_BACKEND_URL="${HOST_URL}/api"
     depends_on:
         - server
     ports:
         - "4173:4173"
-    #networks:
-    #  - network
-    network_mode: host
+    networks:
+      - network
+    hostname: web-client
   nginx:
     image: nginx:latest
     ports:
@@ -36,9 +36,8 @@ services:
     environment:
       - NGINX_HOST=${HOST_URL:-localhost}
       - NGINX_PORT=80
-    #networks:
-    #  - network
-    network_mode: host
+    networks:
+      - network
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
