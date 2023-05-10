@@ -1,0 +1,35 @@
+name: 'Continues Deployment'
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  db_migrate:
+    runs-on: ubuntu-latest
+    environment: github-pages
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Apply migrations
+        run: cd server && npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          
+  deployment:
+    environment: github-pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Docker Compose run
+        run: docker-compose up -d
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SECRET: ${{ secrets.SECRET }}
+          COOKIE_EXPIRATION: ${{ vars.COOKIE_EXPIRATION }}
+          VITE_BACKEND_URL: ${{ vars.DOMAIN_URL }}

@@ -2,7 +2,7 @@ services:
   postgres_db:
     build:
       context: ./server
-      dockerfile:  ./docker/postgres/Dockerfile
+      dockerfile: ./docker/postgres/Dockerfile
       args:
         - NODE_ENV=development
         - POSTGRES_USER=postgres
@@ -10,7 +10,9 @@ services:
         - POSTGRES_DB=be_productive
     ports:
       - "5432:5432"
-    network_mode: "host"
+    #networks:
+    #  - database_network
+    network_mode: host
   server:
     build:
       args:
@@ -23,17 +25,21 @@ services:
       - ./server:/app
       - /app/node_modules
     command: pnpm start:dev
+    #networks:
+    #  - database_network
     depends_on:
       - postgres_db
   web-client:
     build:
-        args:
-            - NODE_ENV=development
+      args:
+        - NODE_ENV=development
     environment:
       - VITE_BACKEND_URL=http://localhost:3000
     volumes:
       - ./web-client:/app
       - /app/node_modules
-    command: pnpm dev --host
-    ports:
-      - "5173:5173"
+    command: pnpm dev --host --port 4173
+
+networks:
+  database_network:
+    driver: bridge
