@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+      # development is used only for testing
+      - development
 
 jobs:
   db_migrate:
