@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -o k8s
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: web-client
+  name: web-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: web-client
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o k8s
+        kompose.version: 1.28.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/be-productive-network: "true"
+        io.kompose.service: web-client
+    spec:
+      containers:
+        - env:
+            - name: VITE_BACKEND_URL
+              value: '"${HOST_URL}/api"'
+          image: beproductive.azurecr.io/be_productive:web-client
+          name: web-client
+          ports:
+            - containerPort: 4173
+          resources: {}
+      hostname: web-client
+      restartPolicy: Always
+status: {}

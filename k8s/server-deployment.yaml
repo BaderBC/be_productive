@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -o k8s
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: server
+  name: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: server
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o k8s
+        kompose.version: 1.28.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/be-productive-network: "true"
+        io.kompose.service: server
+    spec:
+      containers:
+        - env:
+            - name: COOKIES_EXPIRATION
+              value: ${COOKIE_EXPIRATION}
+            - name: DATABASE_URL
+              value: ${DATABASE_URL}
+            - name: SECRET
+              value: ${SECRET}
+          image: beproductive.azurecr.io/be_productive:server
+          name: server
+          ports:
+            - containerPort: 3000
+          resources: {}
+      hostname: server
+      restartPolicy: Always
+status: {}

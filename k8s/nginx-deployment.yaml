@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -o k8s
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nginx
+  name: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: nginx
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o k8s
+        kompose.version: 1.28.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/be-productive-network: "true"
+        io.kompose.service: nginx
+    spec:
+      containers:
+        - env:
+            - name: NGINX_HOST
+              value: ${HOST_URL:-localhost}
+            - name: NGINX_PORT
+              value: "80"
+          image: nginx:latest
+          name: nginx
+          ports:
+            - containerPort: 80
+          resources: {}
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d/default.conf
+              name: nginx-claim0
+      restartPolicy: Always
+      volumes:
+        - name: nginx-claim0
+          persistentVolumeClaim:
+            claimName: nginx-claim0
+status: {}
