@@ -28,7 +28,7 @@ spec:
         - env:
             - name: VITE_BACKEND_URL
               value: '"${HOST_URL}/api"'
-          image: beproductive.azurecr.io/be_productive:web-client
+          image: beproductive.azurecr.io/be_productive-web-client
           name: web-client
           ports:
             - containerPort: 4173
