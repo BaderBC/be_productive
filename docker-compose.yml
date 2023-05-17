@@ -1,5 +1,6 @@
 services:
   server:
+    image: beproductive.azurecr.io/be_productive-server
     build:
       context: ./server
       dockerfile:  ./docker/nest/Dockerfile
@@ -15,6 +16,7 @@ services:
       - network
     hostname: server
   web-client:
+    image: beproductive.azurecr.io/be_productive-web-client
     build:
       context: ./web-client
       dockerfile:  ./Dockerfile

@@ -1,0 +1,24 @@
+apiVersion: skaffold/v3
+kind: Config
+metadata:
+  name: be-productive
+build:
+  artifacts:
+    - image: beproductive.azurecr.io/be_productive-server
+      context: server/
+      docker:
+        dockerfile: docker/nest/Dockerfile
+    - image: beproductive.azurecr.io/be_productive-web-client
+      context: web-client
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  rawYaml:
+    - k8s/be-productive-network-networkpolicy.yaml
+    - k8s/nginx-claim0-persistentvolumeclaim.yaml
+    - k8s/nginx-deployment.yaml
+    - k8s/nginx-service.yaml
+    - k8s/server-deployment.yaml
+    - k8s/server-service.yaml
+    - k8s/web-client-deployment.yaml
+    - k8s/web-client-service.yaml
