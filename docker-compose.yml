@@ -34,7 +34,7 @@ services:
   nginx:
     image: nginx:latest
     ports:
-      - "80:80"
+      - "5001:5001"
     environment:
       - NGINX_HOST=${HOST_URL:-localhost}
       - NGINX_PORT=80
