@@ -9,7 +9,7 @@
     let {is_active, time_spent_ms, session_start} = activity;
 
     let time_spent: number = time_spent_ms;
-    let progress: number = 0;
+    let progress = 0;
 
     const refreshProgressBar = () => {
         if (is_active)

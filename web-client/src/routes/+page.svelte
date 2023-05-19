@@ -7,8 +7,8 @@
     import {onMount} from "svelte";
 
     let user = getUser() || null;
-    let nameOfActivityToAdd: string = '';
-    let progress_type: string = 'percentages';
+    let nameOfActivityToAdd = '';
+    let progress_type = 'percentages';
 
     onMount(() => {
         progress_type = window.localStorage.getItem('progress_type') || 'percentages';
