@@ -21,14 +21,15 @@
 
 <script lang="ts">
   import { goto } from '$app/navigation';
-
   const { VITE_BACKEND_URL } = import.meta.env;
 
-  let email: string = '';
-  let password: string = '';
-  let name: string = '';
-  let surname: string = '';
-  let retype_password: string = '';
+  console.table(import.meta.env);
+  
+  let email = '';
+  let password = '';
+  let name = '';
+  let surname = '';
+  let retype_password = '';
 
   async function register() {
     if (password !== retype_password) {

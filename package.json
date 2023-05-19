@@ -7,6 +7,13 @@
   "private": false,
   "scripts": {
     "start": "docker compose up",
-    "dev": "docker compose -f ./docker-compose.yml -f ./docker-compose.dev.yml up"
+    "dev": "docker compose -f ./docker-compose.yml -f ./docker-compose.dev.yml up",
+    "copy:env": "copyfiles -a *.env ./server & copyfiles -a *.env* ./web-client",
+    "build": "pnpm i && pnpm copy:env && pnpm run-p build:*",
+    "build:docker": "docker compose build"
+  },
+  "devDependencies": {
+    "copyfiles": "^2.4.1",
+    "run-p": "^0.0.0"
   }
 }

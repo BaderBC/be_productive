@@ -1,47 +1,44 @@
 services:
   server:
-    image: beproductive.azurecr.io/be_productive-server
     build:
       context: ./server
-      dockerfile:  ./docker/nest/Dockerfile
+      dockerfile: ./docker/nest/Dockerfile
       args:
         - NODE_ENV=production
     environment:
-      - COOKIES_EXPIRATION=${COOKIE_EXPIRATION}
-      - DATABASE_URL=${DATABASE_URL}
-      - SECRET=${SECRET}
+      COOKIES_EXPIRATION: "${COOKIE_EXPIRATION}"
+      DATABASE_URL: "${DATABASE_URL}"
+      SECRET: "${SECRET}"
     ports:
       - "3000:3000"
     networks:
       - network
     hostname: server
   web-client:
-    image: beproductive.azurecr.io/be_productive-web-client
     build:
       context: ./web-client
-      dockerfile:  ./Dockerfile
+      dockerfile: ./Dockerfile
       args:
         - NODE_ENV=production
-    environment:
-      - VITE_BACKEND_URL="${HOST_URL}/api"
+        - VITE_BACKEND_URL=${HOST_URL}/api
     depends_on:
-        - server
+      - server
     ports:
-        - "4173:4173"
+      - "4173:4173"
     networks:
       - network
     hostname: web-client
   nginx:
-    image: nginx:latest
+    build:
+      context: ./docker/nginx
+      dockerfile: ./Dockerfile
+      args:
+        NGINX_HOST: ${HOST_URL:-localhost}
+        NGINX_PORT: ${NGINX_PORT:-80}
     ports:
-      - "80:80"
-    environment:
-      - NGINX_HOST=${HOST_URL:-localhost}
-      - NGINX_PORT=80
+      - "${NGINX_PORT:-80}:${NGINX_PORT:-80}"
     networks:
       - network
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - web-client
       - server

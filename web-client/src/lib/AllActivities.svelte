@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {gql} from "@apollo/client/core";
+    import {gql} from "@apollo/client/core/index";
     import {client} from "../client";
     import type {ActivityType} from "../../graphql/generated";
     import Activity from "$lib/Activity.svelte";

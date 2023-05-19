@@ -25,13 +25,12 @@ services:
     command: pnpm start:dev
     depends_on:
       - postgres_db
-    network_mode: bridge
   web-client:
     build:
       args:
         - NODE_ENV=development
     environment:
-      - VITE_BACKEND_URL=http://localhost/api
+      - VITE_BACKEND_URL=http://localhost:5001/api
     volumes:
       - ./web-client:/app
       - /app/node_modules

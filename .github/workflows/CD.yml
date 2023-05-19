@@ -24,14 +24,15 @@ jobs:
           
   deployment:
     environment: github-pages
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Docker Compose run
-        run: docker-compose up -d
+        run: docker compose up -d
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SECRET: ${{ secrets.SECRET }}
           COOKIE_EXPIRATION: ${{ vars.COOKIE_EXPIRATION }}
-          VITE_BACKEND_URL: ${{ vars.DOMAIN_URL }}
+          HOST_URL: ${{ vars.DOMAIN_URL }}
+          NGINX_PORT: ${{ vars.NGINX_PORT }}
