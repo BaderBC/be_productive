@@ -182,10 +182,7 @@ export class ActivitiesService {
   ): Promise<ActivityType[]> {
     const [activities, activitiesWithNoSession] =
       await this.prisma.$transaction([
-        this.prisma.activity_week_session.findMany({
-          select: this.fieldsToSelect,
-          where: { activities: { user_id: userId } },
-        }),
+        this.getCurrentWeekActivitySessions(userId, timezone),
         this.getActivitiesWithNoSession(userId, timezone),
       ]);
 
@@ -202,10 +199,7 @@ export class ActivitiesService {
   async getUnfinishedActivities(userId: number, timezone: string) {
     const [activities, activitiesWithNoSession] =
       await this.prisma.$transaction([
-        this.prisma.activity_week_session.findMany({
-          select: this.fieldsToSelect,
-          where: { activities: { user_id: userId } },
-        }),
+        this.getCurrentWeekActivitySessions(userId, timezone),
         this.getActivitiesWithNoSession(userId, timezone),
       ]);
 
@@ -235,6 +229,18 @@ export class ActivitiesService {
       delete activity.activities;
 
       return activity as ActivityType;
+    });
+  }
+
+  private getCurrentWeekActivitySessions(userId: number, timezone: string) {
+    const local_date = moment.tz(timezone);
+    return this.prisma.activity_week_session.findMany({
+      select: this.fieldsToSelect,
+      where: {
+        activities: { user_id: userId },
+        week_number: local_date.week(),
+        year: local_date.year(),
+      },
     });
   }
 
