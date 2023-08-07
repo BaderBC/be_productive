@@ -13,6 +13,8 @@ services:
     network_mode: host
   server:
     build:
+      context: ./server
+      dockerfile: ./docker/nest/Dockerfile
       args:
         - NODE_ENV=development
     environment:
@@ -25,13 +27,20 @@ services:
     command: pnpm start:dev
     depends_on:
       - postgres_db
+    ports:
+      - "3000:3000"
+    network_mode: host
   web-client:
     build:
       args:
         - NODE_ENV=development
-    environment:
-      - VITE_BACKEND_URL=http://localhost:5001/api
+        - VITE_BACKEND_URL=localhost:3000
+      context: ./web-client
+      dockerfile: ./Dockerfile
     volumes:
       - ./web-client:/app
       - /app/node_modules
     command: pnpm dev --host --port 4173
+    ports:
+      - "4173:4173"
+    network_mode: host

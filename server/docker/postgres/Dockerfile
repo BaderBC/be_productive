@@ -8,7 +8,7 @@ ARG POSTGRES_DB
 
 RUN apt-get update && apt-get install -y curl
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
-RUN apt-get install -y nodejs
+RUN apt-get install -y nodejs npm
 RUN curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
 
 RUN npm i -g prisma
