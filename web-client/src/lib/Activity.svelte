@@ -22,7 +22,7 @@
         if (progress > 100) progress = 100;
     };
     refreshProgressBar();
-    setInterval(refreshProgressBar, 1000);
+    setInterval(refreshProgressBar, 15);
 
     async function startActivity() {
         await fetch(BACKEND_URL + "/activities/start", {

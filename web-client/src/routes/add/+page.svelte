@@ -32,7 +32,7 @@
       body: JSON.stringify({
         name: activityName,
         description: activityDescription || null,
-        time_to_spend_weekly: activityTimeWeekly,
+        time_to_spend_weekly: activityTimeWeekly * 1000 * 3600,
       }),
     });
     await goto('/', { invalidateAll: true });

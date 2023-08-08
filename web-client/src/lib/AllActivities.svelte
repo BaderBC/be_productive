@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {gql} from "@apollo/client/core/index";
+    import {gql} from "graphql-tag";
     import {client} from "../client";
     import type {ActivityType} from "../../graphql/generated";
     import Activity from "$lib/Activity.svelte";
@@ -23,7 +23,7 @@
     let activities: Promise<ActivityType[]> =
         client
             .query({query: activities_query})
-            .then(res => res.data);
+            .then(res => res.data.allActivities);
 
 </script>
 
@@ -31,7 +31,7 @@
     <p>loading...</p>
 {:then data}
     <div class="activities">
-    {#each data.allActivities as activity}
+    {#each data as activity}
             <Activity activity={activity} progress_type={progress_type} />
     {/each}
     </div>

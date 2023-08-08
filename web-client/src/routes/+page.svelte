@@ -8,7 +8,7 @@
 
     let user = getUser() || null;
     let nameOfActivityToAdd = '';
-    let progress_type = 'percentages';
+    let progress_type: any = 'percentages';
 
     onMount(() => {
         progress_type = window.localStorage.getItem('progress_type') || 'percentages';
