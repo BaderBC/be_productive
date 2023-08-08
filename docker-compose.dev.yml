@@ -34,7 +34,7 @@ services:
     build:
       args:
         - NODE_ENV=development
-        - VITE_BACKEND_URL=localhost:3000
+        - VITE_BACKEND_URL=http://localhost:3000
       context: ./web-client
       dockerfile: ./Dockerfile
     volumes:
